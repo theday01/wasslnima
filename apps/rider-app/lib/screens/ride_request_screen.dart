@@ -109,7 +109,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                         ),
                       ],
                     ),
-                    const Divider(color: WasslniColors.darkBorder, height: 22),
+                    const Divider(color: WasslniColors.darkBorder, height: 20),
                     // Destination input
                     Row(
                       children: [
@@ -124,7 +124,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                               fontWeight: FontWeight.w600,
                             ),
                             decoration: const InputDecoration(
-                              hintText: 'إلى أين وجهتك؟ (مثال: سيدي معروف، عين الذياب...)',
+                              hintText: 'إلى أين تريد الذهاب؟ (مثال: موروكو مول، كازابورت...)',
                               hintStyle: TextStyle(
                                 color: WasslniColors.textTertiary,
                                 fontSize: 13,
@@ -137,11 +137,11 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                         ),
                       ],
                     ),
-                    const Divider(color: WasslniColors.darkBorder, height: 22),
-                    // Optional Landmark input
+                    const Divider(color: WasslniColors.darkBorder, height: 20),
+                    // Optional Landmark
                     Row(
                       children: [
-                        const Icon(Icons.info_outline, color: WasslniColors.gold500, size: 16),
+                        const Icon(Icons.bookmark_border, color: WasslniColors.gold500, size: 16),
                         const SizedBox(width: 12),
                         Expanded(
                           child: TextField(
@@ -170,14 +170,14 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
 
               const SizedBox(height: 16),
 
-              // Categories Row
+              // Categories Row with Professional Vector Icons
               Row(
                 children: [
-                  _buildCategoryCard('ECO', 'اقتصادي', '25 MAD', '🚗'),
+                  _buildCategoryCard('ECO', 'اقتصادي', '25 MAD', Icons.directions_car),
                   const SizedBox(width: 8),
-                  _buildCategoryCard('CONFORT', 'مريح', '35 MAD', '🚘'),
+                  _buildCategoryCard('CONFORT', 'مريح VIP', '35 MAD', Icons.airline_seat_recline_extra),
                   const SizedBox(width: 8),
-                  _buildCategoryCard('WOMEN', 'سائقة فقط', '25 MAD', '👩'),
+                  _buildCategoryCard('WOMEN', 'سائقة فقط', '25 MAD', Icons.female),
                 ],
               ),
 
@@ -194,7 +194,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
 
               const SizedBox(height: 16),
 
-              // Payment method
+              // Payment method with Vector Icon
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
@@ -204,11 +204,11 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                 ),
                 child: const Row(
                   children: [
-                    Text('💵', style: TextStyle(fontSize: 18)),
+                    Icon(Icons.payments_outlined, color: WasslniColors.gold500, size: 22),
                     SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'طريقة الدفع: نقداً (كاش للسائق)',
+                        'طريقة الدفع: نقداً (كاش مباشرة للسائق)',
                         style: TextStyle(
                           color: WasslniColors.textPrimary,
                           fontSize: 14,
@@ -240,7 +240,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
     );
   }
 
-  Widget _buildCategoryCard(String id, String title, String fare, String emoji) {
+  Widget _buildCategoryCard(String id, String title, String fare, IconData icon) {
     final isSelected = _selectedCategory == id;
     return Expanded(
       child: InkWell(
@@ -260,21 +260,25 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
           decoration: BoxDecoration(
-            color: isSelected ? WasslniColors.gold500.withOpacity(0.12) : WasslniColors.darkSurface,
+            color: isSelected ? WasslniColors.emerald800.withOpacity(0.4) : WasslniColors.darkSurface,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: isSelected ? WasslniColors.gold500 : WasslniColors.darkBorder,
-              width: isSelected ? 1.5 : 1,
+              width: isSelected ? 1.5 : 1.0,
             ),
           ),
           child: Column(
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 22)),
-              const SizedBox(height: 4),
+              Icon(
+                icon,
+                color: isSelected ? WasslniColors.gold500 : WasslniColors.textSecondary,
+                size: 24,
+              ),
+              const SizedBox(height: 6),
               Text(
                 title,
-                style: const TextStyle(
-                  color: WasslniColors.textPrimary,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : WasslniColors.textSecondary,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -282,9 +286,9 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
               const SizedBox(height: 2),
               Text(
                 fare,
-                style: const TextStyle(
-                  color: WasslniColors.gold500,
-                  fontSize: 11,
+                style: TextStyle(
+                  color: isSelected ? WasslniColors.gold500 : WasslniColors.textTertiary,
+                  fontSize: 10,
                   fontWeight: FontWeight.w600,
                 ),
               ),

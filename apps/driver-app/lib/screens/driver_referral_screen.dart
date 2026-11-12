@@ -24,7 +24,7 @@ class DriverReferralScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Hero Banner
+              // Hero Banner with Professional Vector Icon
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
@@ -37,7 +37,7 @@ class DriverReferralScreen extends StatelessWidget {
                   children: [
                     const Row(
                       children: [
-                        Text('🎁', style: TextStyle(fontSize: 24)),
+                        Icon(Icons.card_giftcard, color: WasslniColors.gold500, size: 24),
                         SizedBox(width: 10),
                         Expanded(
                           child: Text(
@@ -106,28 +106,6 @@ class DriverReferralScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 14),
-
-                    // WhatsApp Share
-                    SizedBox(
-                      height: 48,
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF25D366),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
-                        icon: const Icon(Icons.share, size: 18),
-                        label: const Text(
-                          'مشاركة الرابط فوراً عبر واتساب',
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -137,26 +115,22 @@ class DriverReferralScreen extends StatelessWidget {
               // Stats Row
               Row(
                 children: [
-                  _buildMetricCard('السائقون المسجلون', '4', WasslniColors.textPrimary),
+                  _buildStatCard('السائقون المسجلون', '0', Icons.people_outline),
                   const SizedBox(width: 10),
-                  _buildMetricCard('الأشهر المكتسبة', '2 من 6', WasslniColors.gold500),
+                  _buildStatCard('الأشهر المكتسبة', '0 أشهر', Icons.calendar_today_outlined),
                 ],
               ),
 
-              const SizedBox(height: 20),
-              const Text(
-                'حالة السائقين المدعوين:',
-                style: TextStyle(
-                  color: WasslniColors.textPrimary,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 24),
 
-              _buildInviteeItem('عمر ك. (داسيا لوغان)', 'أكمل 5/5 رحلات ✅', 'مكتسب: شهر مجاني', true),
-              _buildInviteeItem('مصطفى ر. (رونو كليو)', 'أكمل 4/5 رحلات (باقي رحلة ⏳)', 'قيد الإنجاز', false),
-              _buildInviteeItem('طارق م. (فيات تيبو)', 'أكمل 1/5 رحلات (باقي 4 رحلات)', 'قيد الإنجاز', false),
+              WasslniButton(
+                text: 'مشاركة الكود عبر الواتساب',
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('مشاركة رابط الدعوة مع الكباتن...')),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -164,69 +138,39 @@ class DriverReferralScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMetricCard(String label, String value, Color color) {
+  Widget _buildStatCard(String title, String value, IconData icon) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: WasslniColors.darkSurface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(color: WasslniColors.darkBorder),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: const TextStyle(color: WasslniColors.textSecondary, fontSize: 12)),
-            const SizedBox(height: 6),
+            Icon(icon, color: WasslniColors.emerald400, size: 20),
+            const SizedBox(height: 8),
             Text(
               value,
-              style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w800),
+              style: const TextStyle(
+                color: WasslniColors.gold500,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              title,
+              style: const TextStyle(
+                color: WasslniColors.textSecondary,
+                fontSize: 11,
+              ),
             ),
           ],
         ),
       ),
     );
   }
-
-  Widget _buildInviteeItem(String name, String progress, String reward, bool isDone) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: WasslniColors.darkSurface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: isDone ? WasslniColors.emerald500.withOpacity(0.4) : WasslniColors.darkBorderSubtle,
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: const TextStyle(
-                  color: WasslniColors.textPrimary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(progress, style: TextStyle(color: isDone ? WasslniColors.success : WasslniColors.warning, fontSize: 11)),
-            ],
-          ),
-          Text(
-            reward,
-            style: TextStyle(
-              color: isDone ? WasslniColors.gold500 : WasslniColors.textTertiary,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
-

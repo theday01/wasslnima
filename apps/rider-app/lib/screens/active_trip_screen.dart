@@ -19,22 +19,10 @@ class ActiveTripScreen extends StatelessWidget {
       backgroundColor: WasslniColors.darkCanvas,
       body: Stack(
         children: [
-          // Simulated Live Trip Map
-          Container(
-            color: const Color(0xFF0D1411),
-            child: const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.navigation, color: WasslniColors.emerald400, size: 48),
-                  SizedBox(height: 8),
-                  Text(
-                    'مسار الرحلة المباشر',
-                    style: TextStyle(color: WasslniColors.textSecondary),
-                  ),
-                ],
-              ),
-            ),
+          // Live Navigation Vector Map
+          const RealisticVectorMapView(
+            isDriverHeatmap: false,
+            centerTitle: 'الكابتن في طريقه إليك (2 دقيقة)',
           ),
 
           // Top Safety Bar with SOS
@@ -50,9 +38,16 @@ class ActiveTripScreen extends StatelessWidget {
                         context: context,
                         builder: (_) => AlertDialog(
                           backgroundColor: WasslniColors.darkSurface,
-                          title: const Text('🚨 إنذار الطوارئ SOS'),
+                          title: const Row(
+                            children: [
+                              Icon(Icons.warning_amber_rounded, color: WasslniColors.error),
+                              SizedBox(width: 8),
+                              Text('إنذار الطوارئ SOS', style: TextStyle(color: Colors.white, fontSize: 16)),
+                            ],
+                          ),
                           content: const Text(
                             'هل تريد الاتصال بالشرطة (19) ومشاركة موقعك المباشر مع جهات اتصالك الموثوقة؟',
+                            style: TextStyle(color: WasslniColors.textSecondary),
                           ),
                           actions: [
                             TextButton(
@@ -83,7 +78,7 @@ class ActiveTripScreen extends StatelessWidget {
                         Icon(Icons.shield, color: WasslniColors.emerald400, size: 16),
                         SizedBox(width: 4),
                         Text(
-                          'رحلة محمية',
+                          'رحلة محمية بالـ GPS',
                           style: TextStyle(
                             color: WasslniColors.emerald400,
                             fontSize: 12,
@@ -98,39 +93,38 @@ class ActiveTripScreen extends StatelessWidget {
             ),
           ),
 
-          // Bottom Trip Card
+          // Bottom Active Driver Sheet
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: WasslniColors.darkSurface.withOpacity(0.95),
+                color: WasslniColors.darkSurface.withOpacity(0.96),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: WasslniColors.gold500.withOpacity(0.4)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.6),
                     blurRadius: 25,
-                    offset: const Offset(0, 8),
+                    offset: const Offset(0, 10),
                   ),
                 ],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Driver Info Header
                   Row(
                     children: [
                       Container(
-                        width: 52,
-                        height: 52,
+                        width: 50,
+                        height: 50,
                         decoration: BoxDecoration(
-                          color: WasslniColors.emerald800.withOpacity(0.4),
+                          color: WasslniColors.emerald800.withOpacity(0.3),
                           shape: BoxShape.circle,
                           border: Border.all(color: WasslniColors.gold500),
                         ),
-                        child: const Icon(Icons.person, color: WasslniColors.gold500, size: 30),
+                        child: const Icon(Icons.person, color: WasslniColors.gold500, size: 28),
                       ),
                       const SizedBox(width: 14),
                       Expanded(
@@ -141,7 +135,7 @@ class ActiveTripScreen extends StatelessWidget {
                               driverName,
                               style: const TextStyle(
                                 color: WasslniColors.textPrimary,
-                                fontSize: 17,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -163,87 +157,63 @@ class ActiveTripScreen extends StatelessWidget {
                             '$agreedPriceMad MAD',
                             style: const TextStyle(
                               color: WasslniColors.gold500,
-                              fontSize: 22,
+                              fontSize: 20,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
                           const Text(
-                            'نقداً كاش',
+                            'السعر المتفق عليه',
                             style: TextStyle(
                               color: WasslniColors.textTertiary,
-                              fontSize: 12,
+                              fontSize: 10,
                             ),
                           ),
                         ],
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: WasslniColors.darkSurfaceRaised,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '⏱️ وقت الوصول المقدر:',
-                          style: TextStyle(color: WasslniColors.textSecondary, fontSize: 13),
-                        ),
-                        Text(
-                          '3 دقائق (800 متر)',
-                          style: TextStyle(
-                            color: Color(0xFF10B981),
-                            fontWeight: FontWeight.w700,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Actions: Call, WhatsApp Share
+                  const Divider(color: WasslniColors.darkBorder),
+                  const SizedBox(height: 12),
                   Row(
                     children: [
                       Expanded(
-                        child: SizedBox(
-                          height: 48,
-                          child: ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: WasslniColors.darkSurfaceRaised,
-                              foregroundColor: WasslniColors.textPrimary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                                side: const BorderSide(color: WasslniColors.darkBorder),
-                              ),
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: WasslniColors.emerald400,
+                            side: const BorderSide(color: WasslniColors.emerald500),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            icon: const Icon(Icons.call, size: 18),
-                            label: const Text('اتصال مقنع'),
-                            onPressed: () {},
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
+                          icon: const Icon(Icons.call, size: 18),
+                          label: const Text('اتصال بالسائق'),
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('جاري الاتصال المشفر بالكابتن...')),
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: SizedBox(
-                          height: 48,
-                          child: ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF25D366),
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: WasslniColors.gold500,
+                            side: const BorderSide(color: WasslniColors.gold500),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            icon: const Icon(Icons.share, size: 18),
-                            label: const Text('مشاركة واتساب'),
-                            onPressed: () {},
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
+                          icon: const Icon(Icons.chat_bubble_outline, size: 18),
+                          label: const Text('مراسلة مباشرة'),
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('فتح شات المحادثة مع السائق...')),
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -257,4 +227,3 @@ class ActiveTripScreen extends StatelessWidget {
     );
   }
 }
-

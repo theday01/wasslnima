@@ -12,46 +12,31 @@ class DriverHomeScreen extends StatefulWidget {
 }
 
 class _DriverHomeScreenState extends State<DriverHomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isOnline = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: WasslniColors.darkCanvas,
+      drawer: WasslniSideDrawer(
+        userName: 'كابتن وصّلني',
+        userPhone: '+212 6XX-XXXXXX',
+        userRole: 'driver',
+        onWalletTap: () {
+          Navigator.pop(context);
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const DriverWalletScreen()),
+          );
+        },
+      ),
       body: Stack(
         children: [
-          // Simulated Heatmap Background (Casa Demand Hotspots)
-          Container(
-            color: const Color(0xFF0D1411),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.local_fire_department,
-                    color: WasslniColors.warning.withOpacity(0.5),
-                    size: 72,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'الخريطة الحرارية لمناطق الطلب العالي',
-                    style: TextStyle(
-                      color: WasslniColors.textSecondary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'المعاريف • سيدي معروف • مارينا الدار البيضاء',
-                    style: TextStyle(
-                      color: WasslniColors.gold500,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          // Realistic Casablanca Demand Heatmap Canvas
+          const RealisticVectorMapView(
+            isDriverHeatmap: true,
+            centerTitle: 'الدار البيضاء • المعاريف (طلب مرتفع)',
           ),
 
           // Top Header & Free Commission Badge
@@ -63,8 +48,10 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildHeaderBtn(Icons.menu, () {}),
-                      // 0% Commission Badge Counter
+                      _buildHeaderBtn(Icons.menu, () {
+                        _scaffoldKey.currentState?.openDrawer();
+                      }),
+                      // 0% Commission Badge Counter with Professional Icon
                       InkWell(
                         onTap: () {
                           Navigator.of(context).push(
@@ -74,7 +61,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                           decoration: BoxDecoration(
-                            color: WasslniColors.darkSurface.withOpacity(0.9),
+                            color: WasslniColors.darkSurface.withOpacity(0.92),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(color: WasslniColors.gold500),
                             boxShadow: [
@@ -86,7 +73,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                           ),
                           child: const Row(
                             children: [
-                              Text('🎉', style: TextStyle(fontSize: 16)),
+                              Icon(Icons.verified, color: WasslniColors.gold500, size: 16),
                               SizedBox(width: 6),
                               Text(
                                 'باقي 48 يوماً (0% عمولة)',
@@ -100,10 +87,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                           ),
                         ),
                       ),
-                      _buildHeaderBtn(Icons.card_giftcard, () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const DriverReferralScreen()),
-                        );
+                      _buildHeaderBtn(Icons.notifications_none, () {
+                        WasslniNotificationsSheet.show(context, isDriver: true);
                       }),
                     ],
                   ),
@@ -137,9 +122,9 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildStatItem('أرباح اليوم', '0.00 MAD', WasslniColors.gold500),
-                      _buildStatItem('الرحلات', '0', WasslniColors.textPrimary),
-                      _buildStatItem('التقييم', 'جديد ⭐ 5.0', WasslniColors.success),
+                      _buildStatItem('أرباح اليوم', '0.00 MAD', WasslniColors.gold500, Icons.monetization_on_outlined),
+                      _buildStatItem('الرحلات', '0', WasslniColors.textPrimary, Icons.directions_car_outlined),
+                      _buildStatItem('التقييم', 'جديد 5.0', WasslniColors.success, Icons.star_rate_rounded),
                     ],
                   ),
                   const SizedBox(height: 18),
@@ -221,25 +206,39 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           color: WasslniColors.darkSurface.withOpacity(0.9),
           shape: BoxShape.circle,
           border: Border.all(color: WasslniColors.darkBorder),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Icon(icon, color: WasslniColors.textPrimary, size: 20),
       ),
     );
   }
 
-  Widget _buildStatItem(String label, String value, Color valColor) {
+  Widget _buildStatItem(String label, String value, Color valColor, IconData icon) {
     return Column(
       children: [
-        Text(
-          label,
-          style: const TextStyle(color: WasslniColors.textSecondary, fontSize: 12),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: WasslniColors.textSecondary, size: 14),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: const TextStyle(color: WasslniColors.textSecondary, fontSize: 12),
+            ),
+          ],
         ),
         const SizedBox(height: 4),
         Text(
           value,
           style: TextStyle(
             color: valColor,
-            fontSize: 18,
+            fontSize: 17,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -247,4 +246,3 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     );
   }
 }
-

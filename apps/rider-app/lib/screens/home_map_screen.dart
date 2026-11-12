@@ -2,38 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ui/flutter_ui.dart';
 import 'ride_request_screen.dart';
 
-class HomeMapScreen extends StatelessWidget {
+class HomeMapScreen extends StatefulWidget {
   const HomeMapScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeMapScreen> createState() => _HomeMapScreenState();
+}
+
+class _HomeMapScreenState extends State<HomeMapScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: WasslniColors.darkCanvas,
+      drawer: const WasslniSideDrawer(
+        userName: 'الراكب الكريم',
+        userPhone: '+212 6XX-XXXXXX',
+        userRole: 'rider',
+      ),
       body: Stack(
         children: [
-          // Simulated Dark Map Background
-          Container(
-            color: const Color(0xFF0D1411),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.map_outlined,
-                    size: 80,
-                    color: WasslniColors.emerald800.withOpacity(0.4),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'خريطة الدار البيضاء الحية',
-                    style: TextStyle(
-                      color: WasslniColors.textTertiary,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          // Authentic Realistic Vector Map (Casablanca Grid & Streets)
+          const RealisticVectorMapView(
+            isDriverHeatmap: false,
+            centerTitle: 'الدار البيضاء • أنفا',
           ),
 
           // Floating Top App Bar
@@ -43,20 +37,29 @@ class HomeMapScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildCircleBtn(Icons.menu, () {}),
+                  _buildCircleBtn(Icons.menu, () {
+                    _scaffoldKey.currentState?.openDrawer();
+                  }),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     decoration: BoxDecoration(
-                      color: WasslniColors.darkSurface.withOpacity(0.85),
+                      color: WasslniColors.darkSurface.withOpacity(0.88),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: WasslniColors.gold500.withOpacity(0.3)),
+                      border: Border.all(color: WasslniColors.gold500.withOpacity(0.4)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.4),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: const Row(
                       children: [
-                        Text('🇲🇦', style: TextStyle(fontSize: 14)),
+                        Icon(Icons.location_on, color: WasslniColors.gold500, size: 16),
                         SizedBox(width: 6),
                         Text(
-                          'وصّلني كازا',
+                          'وصّلني كازابلانكا',
                           style: TextStyle(
                             color: WasslniColors.gold500,
                             fontWeight: FontWeight.w700,
@@ -66,7 +69,9 @@ class HomeMapScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  _buildCircleBtn(Icons.notifications_none, () {}),
+                  _buildCircleBtn(Icons.notifications_none, () {
+                    WasslniNotificationsSheet.show(context, isDriver: false);
+                  }),
                 ],
               ),
             ),
@@ -79,7 +84,7 @@ class HomeMapScreen extends StatelessWidget {
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: WasslniColors.darkSurface.withOpacity(0.92),
+                color: WasslniColors.darkSurface.withOpacity(0.95),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: WasslniColors.gold500.withOpacity(0.3)),
                 boxShadow: [
@@ -132,19 +137,27 @@ class HomeMapScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Icon(Icons.mic, color: WasslniColors.emerald400),
+                          Icon(Icons.mic_none, color: WasslniColors.emerald400),
                         ],
                       ),
                     ),
                   ),
 
                   const SizedBox(height: 14),
-                  // Saved places chips
+                  // Saved places chips with proper Material Icons
                   Row(
                     children: [
-                      _buildPlaceChip('🏠 الدار (المعاريف)', () {}),
+                      _buildPlaceChip(Icons.home, 'الدار (المعاريف)', () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const RideRequestScreen()),
+                        );
+                      }),
                       const SizedBox(width: 8),
-                      _buildPlaceChip('💼 الخدمة (سيدي معروف)', () {}),
+                      _buildPlaceChip(Icons.work, 'الخدمة (سيدي معروف)', () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const RideRequestScreen()),
+                        );
+                      }),
                     ],
                   ),
                 ],
@@ -164,16 +177,23 @@ class HomeMapScreen extends StatelessWidget {
         width: 44,
         height: 44,
         decoration: BoxDecoration(
-          color: WasslniColors.darkSurface.withOpacity(0.85),
+          color: WasslniColors.darkSurface.withOpacity(0.88),
           shape: BoxShape.circle,
           border: Border.all(color: WasslniColors.darkBorder),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Icon(icon, color: WasslniColors.textPrimary, size: 20),
       ),
     );
   }
 
-  Widget _buildPlaceChip(String label, VoidCallback onTap) {
+  Widget _buildPlaceChip(IconData icon, String label, VoidCallback onTap) {
     return Expanded(
       child: InkWell(
         onTap: onTap,
@@ -185,18 +205,28 @@ class HomeMapScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: WasslniColors.darkBorderSubtle),
           ),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: WasslniColors.textPrimary,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: WasslniColors.gold500, size: 14),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: WasslniColors.textPrimary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 }
-

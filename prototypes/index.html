@@ -777,28 +777,30 @@
 
       <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px; flex: 1; overflow-y: auto;">
         
-        <!-- Address & Landmark Card -->
+        <!-- Address & Landmark Card (Real Dynamic User Inputs) -->
         <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 16px;">
           <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--status-success); box-shadow: 0 0 10px var(--status-success);"></div>
-            <div>
-              <div style="font-size: 11px; color: var(--text-tertiary);">نقطة الانطلاق</div>
-              <div style="font-size: 14px; font-weight: 700; color: #FFF;">شارع الزرقطوني (قرب توين سنتر)</div>
+            <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--status-success); box-shadow: 0 0 10px var(--status-success); flex-shrink: 0;"></div>
+            <div style="flex: 1;">
+              <div style="font-size: 11px; color: var(--text-tertiary); margin-bottom: 4px;">نقطة الانطلاق</div>
+              <input id="pickup-input" type="text" placeholder="من أين تنطلق؟ (مثال: محطة القطار، المعاريف...)" style="width: 100%; background: transparent; border: none; outline: none; color: #FFF; font-size: 14px; font-weight: 700; font-family: inherit;">
             </div>
           </div>
           <div style="height: 1px; background: var(--border-subtle); margin: 12px 0 12px 24px;"></div>
           <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--status-error); box-shadow: 0 0 10px var(--status-error);"></div>
-            <div>
-              <div style="font-size: 11px; color: var(--text-tertiary);">الوجهة</div>
-              <div style="font-size: 14px; font-weight: 700; color: #FFF;">موروكو مول، عين الذياب</div>
+            <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--status-error); box-shadow: 0 0 10px var(--status-error); flex-shrink: 0;"></div>
+            <div style="flex: 1;">
+              <div style="font-size: 11px; color: var(--text-tertiary); margin-bottom: 4px;">الوجهة</div>
+              <input id="dest-input" type="text" placeholder="إلى أين وجهتك؟ (مثال: سيدي معروف، عين الذياب...)" style="width: 100%; background: transparent; border: none; outline: none; color: #FFF; font-size: 14px; font-weight: 700; font-family: inherit;">
             </div>
           </div>
 
           <!-- Moroccan Landmark Helper -->
           <div class="landmark-box" style="margin-top: 14px;">
             <span>🕌</span>
-            <div><strong>المعلم القريب:</strong> قبالة الباب رقم 2 حدا النافورة الكبيرة</div>
+            <div style="flex: 1;">
+              <input id="landmark-input" type="text" placeholder="معلم قريب لتسهيل اللقاء (اختياري: حدا الصيدلية، قبالة بيم...)" style="width: 100%; background: transparent; border: none; outline: none; color: var(--accent-gold-light); font-size: 12px; font-family: inherit;">
+            </div>
           </div>
         </div>
 
@@ -830,14 +832,14 @@
           <div class="stepper-row">
             <button class="stepper-btn" onclick="alterPrice(-2)">−</button>
             <div class="price-value-container">
-              <span id="price-number" class="price-number">30</span>
+              <span id="price-number" class="price-number">25</span>
               <span class="price-currency">MAD</span>
             </div>
             <button class="stepper-btn" onclick="alterPrice(2)">+</button>
           </div>
 
           <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">
-            السعر المرجعي المحسوب: <strong style="color: var(--accent-gold);">28 MAD</strong> (المسافة: 7.8 كم)
+            السعر المرجعي المحسوب: <strong style="color: var(--accent-gold);">25 MAD</strong>
           </div>
         </div>
 
@@ -851,7 +853,7 @@
         </div>
 
         <!-- Find Drivers Button -->
-        <button class="btn-grand-action" style="margin-top: auto;" onclick="showScreen('screen-bidding-radar')">
+        <button class="btn-grand-action" style="margin-top: auto;" onclick="submitRideRequest()">
           <span>🚀 ابحث عن سائقين واعرض سعرك</span>
         </button>
       </div>
@@ -869,11 +871,18 @@
       </div>
 
       <div style="padding: 18px; display: flex; flex-direction: column; gap: 14px; flex: 1;">
+        <!-- Real Route Display Box -->
+        <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px 14px;">
+          <div style="font-size: 11px; color: var(--text-tertiary); margin-bottom: 2px;">مسار رحلتك المطلوبة:</div>
+          <div id="radar-route-display" style="font-size: 13.5px; font-weight: 700; color: #FFF;">شارع الزرقطوني ➔ موروكو مول</div>
+          <div id="radar-landmark-display" style="font-size: 11px; color: var(--accent-gold); margin-top: 4px; display: none;"></div>
+        </div>
+
         <!-- Pulsing Radar Banner -->
         <div style="background: linear-gradient(135deg, rgba(13, 62, 48, 0.3) 0%, rgba(212, 175, 55, 0.1) 100%); border: 1px solid var(--border-emerald); border-radius: var(--radius-lg); padding: 16px; text-align: center;">
           <div style="font-size: 13px; color: var(--text-secondary);">سعرك المعروض حالياً:</div>
-          <div style="font-size: 32px; font-weight: 800; color: var(--accent-gold); font-family: 'Plus Jakarta Sans', sans-serif;">30 MAD</div>
-          <div style="font-size: 12px; color: var(--status-success); margin-top: 4px;">📡 يتم بث طلبك الآن لـ 9 سائقين في محيطك</div>
+          <div id="radar-price-display" style="font-size: 32px; font-weight: 800; color: var(--accent-gold); font-family: 'Plus Jakarta Sans', sans-serif;">25 MAD</div>
+          <div style="font-size: 12px; color: var(--status-success); margin-top: 4px;">📡 يتم بث طلبك الآن للسائقين القريبين منك</div>
         </div>
 
         <div style="font-size: 13.5px; font-weight: 700; color: var(--text-secondary); margin-top: 6px;">
@@ -891,7 +900,7 @@
               </div>
             </div>
             <div class="bid-amount">
-              <div class="value">30 MAD</div>
+              <div id="bid1-price" class="value">25 MAD</div>
               <div style="font-size: 11px; color: var(--status-success); font-weight: 700;">قبل سعرك ✅</div>
             </div>
           </div>
@@ -901,7 +910,7 @@
           </div>
           <div style="display: flex; gap: 10px; margin-top: 4px;">
             <button style="flex: 1; height: 44px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-secondary); font-weight: 600; cursor: pointer;">تخطي</button>
-            <button style="flex: 2; height: 44px; background: linear-gradient(135deg, var(--primary-emerald-light), var(--primary-emerald)); border: 1px solid var(--border-gold); border-radius: var(--radius-md); color: #FFF; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-emerald);" onclick="showScreen('screen-active-trip')">قبول بـ 30 MAD</button>
+            <button id="bid1-btn" style="flex: 2; height: 44px; background: linear-gradient(135deg, var(--primary-emerald-light), var(--primary-emerald)); border: 1px solid var(--border-gold); border-radius: var(--radius-md); color: #FFF; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-emerald);" onclick="showScreen('screen-active-trip')">قبول العرض</button>
           </div>
         </div>
 
@@ -916,7 +925,7 @@
               </div>
             </div>
             <div class="bid-amount">
-              <div class="value" style="color: var(--status-warning);">34 MAD</div>
+              <div id="bid2-price" class="value" style="color: var(--status-warning);">29 MAD</div>
               <div style="font-size: 11px; color: var(--status-warning); font-weight: 700;">+4 دراهم للتكييف</div>
             </div>
           </div>
@@ -926,6 +935,8 @@
           </div>
           <div style="display: flex; gap: 10px; margin-top: 4px;">
             <button style="flex: 1; height: 44px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-secondary); font-weight: 600; cursor: pointer;">تخطي</button>
+            <button id="bid2-btn" style="flex: 2; height: 44px; background: linear-gradient(135deg, #1C2B24, #121B17); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: #FFF; font-weight: 700; cursor: pointer;" onclick="showScreen('screen-active-trip')">قبول العرض</button>
+          </div>
             <button style="flex: 2; height: 44px; background: linear-gradient(135deg, #1C2B24, #121B17); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: #FFF; font-weight: 700; cursor: pointer;" onclick="showScreen('screen-active-trip')">قبول بـ 34 MAD</button>
           </div>
         </div>
@@ -999,24 +1010,24 @@
             <div style="font-size: 12px; color: var(--accent-gold-light); margin-top: 2px;">0% عمولة على كافة رحلاتك</div>
           </div>
           <div style="text-align: center; background: rgba(0, 0, 0, 0.4); padding: 8px 14px; border-radius: var(--radius-md); border: 1px solid rgba(212, 175, 55, 0.3);">
-            <div style="font-size: 24px; font-weight: 800; color: var(--accent-gold); font-family: 'Plus Jakarta Sans', sans-serif;">48</div>
+            <div style="font-size: 24px; font-weight: 800; color: var(--accent-gold); font-family: 'Plus Jakarta Sans', sans-serif;">60</div>
             <div style="font-size: 10px; color: var(--text-secondary);">يوماً متبقية</div>
           </div>
         </div>
 
-        <!-- Today Stats 3-Col Grid -->
+        <!-- Today Stats 3-Col Grid (Fresh Driver State) -->
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
           <div style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
             <div style="font-size: 11px; color: var(--text-tertiary);">أرباح اليوم</div>
-            <div style="font-size: 18px; font-weight: 800; color: var(--accent-gold); margin-top: 4px; font-family: 'Plus Jakarta Sans', sans-serif;">340 MAD</div>
+            <div style="font-size: 18px; font-weight: 800; color: var(--accent-gold); margin-top: 4px; font-family: 'Plus Jakarta Sans', sans-serif;">0.00 MAD</div>
           </div>
           <div style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
             <div style="font-size: 11px; color: var(--text-tertiary);">الرحلات</div>
-            <div style="font-size: 18px; font-weight: 800; color: #FFF; margin-top: 4px; font-family: 'Plus Jakarta Sans', sans-serif;">8</div>
+            <div style="font-size: 18px; font-weight: 800; color: #FFF; margin-top: 4px; font-family: 'Plus Jakarta Sans', sans-serif;">0</div>
           </div>
           <div style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
             <div style="font-size: 11px; color: var(--text-tertiary);">التقييم</div>
-            <div style="font-size: 18px; font-weight: 800; color: var(--status-success); margin-top: 4px;">⭐ 4.96</div>
+            <div style="font-size: 18px; font-weight: 800; color: var(--status-success); margin-top: 4px;">جديد ⭐ 5.0</div>
           </div>
         </div>
 
@@ -1062,11 +1073,11 @@
       </div>
 
       <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px; flex: 1; overflow-y: auto;">
-        <!-- Wallet Emerald Card -->
+        <!-- Wallet Emerald Card (Clean Balance) -->
         <div style="background: linear-gradient(135deg, var(--primary-emerald-light) 0%, #061F17 100%); border-radius: var(--radius-lg); padding: 22px; border: 1px solid var(--accent-gold); box-shadow: var(--shadow-emerald);">
           <div style="font-size: 13px; color: var(--accent-gold-light);">رصيد أرباح السائق القابل للسحب</div>
           <div style="font-size: 38px; font-weight: 800; color: #FFF; margin: 8px 0; font-family: 'Plus Jakarta Sans', sans-serif;">
-            1,280.00 <span style="font-size: 20px; color: var(--accent-gold);">MAD</span>
+            0.00 <span style="font-size: 20px; color: var(--accent-gold);">MAD</span>
           </div>
           <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--status-success);">
             <span>العمولة المستحقة: 0.00 MAD (مجاناً)</span>
@@ -1085,18 +1096,18 @@
           </p>
 
           <div style="background: rgba(0, 0, 0, 0.4); border: 1px dashed var(--accent-gold); border-radius: var(--radius-md); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 800; color: #FFF; letter-spacing: 2px;">YASSINE-WSL7</span>
-            <span style="color: var(--accent-gold); font-size: 13px; font-weight: 700; cursor: pointer;" onclick="alert('تم نسخ الكود YASSINE-WSL7 بنجاح!')">📋 نسخ الكود</span>
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 800; color: #FFF; letter-spacing: 2px;">WAS-START26</span>
+            <span style="color: var(--accent-gold); font-size: 13px; font-weight: 700; cursor: pointer;" onclick="alert('تم نسخ الكود WAS-START26 بنجاح!')">📋 نسخ الكود</span>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: center; margin-bottom: 14px;">
             <div style="background: var(--bg-surface); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
               <div style="font-size: 11px; color: var(--text-tertiary);">المدعوون المسجلون</div>
-              <div style="font-size: 18px; font-weight: 800; color: #FFF; margin-top: 2px;">4 سائقين</div>
+              <div style="font-size: 18px; font-weight: 800; color: #FFF; margin-top: 2px;">0 سائقين</div>
             </div>
             <div style="background: var(--bg-surface); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
               <div style="font-size: 11px; color: var(--text-tertiary);">أشهر مجانية مكتسبة</div>
-              <div style="font-size: 18px; font-weight: 800; color: var(--accent-gold); margin-top: 2px;">2 من 6 أشهر</div>
+              <div style="font-size: 18px; font-weight: 800; color: var(--accent-gold); margin-top: 2px;">0 من 6 أشهر</div>
             </div>
           </div>
 
@@ -1193,7 +1204,7 @@
       }
     }
 
-    let currentPrice = 30;
+    let currentPrice = 25;
     function alterPrice(delta) {
       currentPrice = Math.max(12, Math.min(90, currentPrice + delta));
       document.getElementById('price-number').innerText = currentPrice;
@@ -1204,6 +1215,37 @@
       cardElement.classList.add('selected');
       currentPrice = basePrice;
       document.getElementById('price-number').innerText = currentPrice;
+    }
+
+    function submitRideRequest() {
+      const pickup = document.getElementById('pickup-input').value.trim();
+      const dest = document.getElementById('dest-input').value.trim();
+      const landmark = document.getElementById('landmark-input').value.trim();
+
+      if (!pickup || !dest) {
+        alert('المرجو كتابة نقطة الانطلاق والوجهة أولاً لمتابعة طلب الرحلة.');
+        return;
+      }
+
+      document.getElementById('radar-route-display').innerText = pickup + ' ➔ ' + dest;
+      document.getElementById('radar-price-display').innerText = currentPrice + ' MAD';
+      if (landmark) {
+        document.getElementById('radar-landmark-display').innerText = 'المعلم: ' + landmark;
+        document.getElementById('radar-landmark-display').style.display = 'block';
+      } else {
+        document.getElementById('radar-landmark-display').style.display = 'none';
+      }
+      
+      // Update bid card 1 to accept user's exact price
+      document.getElementById('bid1-price').innerText = currentPrice + ' MAD';
+      document.getElementById('bid1-btn').innerText = 'قبول بـ ' + currentPrice + ' MAD';
+      
+      // Update bid card 2 to offer user's price + 4
+      const counterPrice = currentPrice + 4;
+      document.getElementById('bid2-price').innerText = counterPrice + ' MAD';
+      document.getElementById('bid2-btn').innerText = 'قبول بـ ' + counterPrice + ' MAD';
+
+      showScreen('screen-bidding-radar');
     }
   </script>
 </body>

@@ -13,11 +13,11 @@ class _DriverOnboardingDocsScreenState extends State<DriverOnboardingDocsScreen>
   int _currentStep = 1;
   final int _totalSteps = 5;
 
-  // Documents status flags
-  bool _cinUploaded = true;
-  bool _licenseUploaded = true;
-  bool _carteProUploaded = true;
-  bool _carteGriseUploaded = true;
+  // Documents status flags - starts completely fresh for new driver
+  bool _cinUploaded = false;
+  bool _licenseUploaded = false;
+  bool _carteProUploaded = false;
+  bool _carteGriseUploaded = false;
   bool _insuranceUploaded = false;
   bool _selfieUploaded = false;
 

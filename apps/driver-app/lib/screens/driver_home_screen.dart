@@ -133,13 +133,13 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Daily Stats Row
+                  // Daily Stats Row (Fresh Active Driver State)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildStatItem('أرباح اليوم', '340 MAD', WasslniColors.gold500),
-                      _buildStatItem('الرحلات', '8', WasslniColors.textPrimary),
-                      _buildStatItem('التقييم', '⭐ 4.96', WasslniColors.success),
+                      _buildStatItem('أرباح اليوم', '0.00 MAD', WasslniColors.gold500),
+                      _buildStatItem('الرحلات', '0', WasslniColors.textPrimary),
+                      _buildStatItem('التقييم', 'جديد ⭐ 5.0', WasslniColors.success),
                     ],
                   ),
                   const SizedBox(height: 18),

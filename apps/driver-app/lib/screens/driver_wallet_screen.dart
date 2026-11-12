@@ -55,7 +55,7 @@ class DriverWalletScreen extends StatelessWidget {
                       textBaseline: TextBaseline.alphabetic,
                       children: [
                         Text(
-                          '1,280.00',
+                          '0.00',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 34,

@@ -37,4 +37,6 @@ $RECYCLE.BIN/
 *.tmp
 *.bak
 *.log
+*.zip
+*.apk
 

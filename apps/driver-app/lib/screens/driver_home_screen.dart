@@ -61,7 +61,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.between,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buildHeaderBtn(Icons.menu, () {}),
                       // 0% Commission Badge Counter

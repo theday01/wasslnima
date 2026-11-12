@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 16 + PostGIS 3.4
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: wasslni_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-wasslni_admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-wasslni_secret_2026}
+      POSTGRES_DB: ${DB_NAME:-wasslni_db}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../../database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    networks:
+      - wasslni_network
+
+  # Redis 7 for Live Geolocation, Cache & Pub/Sub
+  redis:
+    image: redis:7-alpine
+    container_name: wasslni_redis
+    restart: always
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-wasslni_redis_pass}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - wasslni_network
+
+  # Wasslni Backend Modular API
+  api:
+    build:
+      context: ../../apps/api
+      dockerfile: ../../infrastructure/docker/Dockerfile.api
+    container_name: wasslni_api
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://${DB_USER:-wasslni_admin}:${DB_PASSWORD:-wasslni_secret_2026}@postgres:5432/${DB_NAME:-wasslni_db}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-wasslni_redis_pass}
+      JWT_SECRET: ${JWT_SECRET:-super_secret_moroccan_jwt_wasslni_2026}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - wasslni_network
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks:
+  wasslni_network:
+    driver: bridge
+

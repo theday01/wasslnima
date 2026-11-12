@@ -1,0 +1,56 @@
+name: Wasslni Mobile APK & CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  # Build Android APKs in Cloud
+  build-mobile-apks:
+    name: Build Wasslni Android Release APKs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Scaffolding & Build Rider App APK
+        working-directory: apps/rider-app
+        run: |
+          flutter create . --platforms=android --org=ma.wasslni --project-name=rider_app
+          flutter pub get
+          flutter build apk --release
+
+      - name: Upload Rider App APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasslni-rider-app-release-apk
+          path: apps/rider-app/build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Scaffolding & Build Driver App APK
+        working-directory: apps/driver-app
+        run: |
+          flutter create . --platforms=android --org=ma.wasslni --project-name=driver_app
+          flutter pub get
+          flutter build apk --release
+
+      - name: Upload Driver App APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasslni-driver-app-release-apk
+          path: apps/driver-app/build/app/outputs/flutter-apk/app-release.apk

@@ -1,0 +1,52 @@
+/**
+ * WASSLNI LUXURY DESIGN TOKENS (V2 - Ultra Luxury Moroccan Edition)
+ * Deep Emerald (#0D3E30) + Royal Warm Gold (#D4AF37) + Titanium Dark (#070908)
+ */
+
+:root {
+  /* Brand Core Luxury Colors */
+  --color-primary-emerald: #0d3e30;
+  --color-primary-emerald-glow: rgba(13, 62, 48, 0.45);
+  --color-primary-emerald-light: #185e49;
+  
+  --color-accent-gold: #d4af37;
+  --color-accent-gold-light: #f3e5ab;
+  --color-accent-gold-glow: rgba(212, 175, 55, 0.35);
+
+  /* Surfaces & Canvas */
+  --color-bg-canvas: #070908;
+  --color-bg-surface: #0e1311;
+  --color-bg-surface-elevated: #161e1a;
+  --color-bg-glass-card: rgba(14, 19, 17, 0.85);
+  --color-bg-glass-sheet: rgba(10, 14, 12, 0.94);
+
+  /* Precise Borders */
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-border-gold: rgba(212, 175, 55, 0.3);
+  --color-border-emerald: rgba(24, 94, 73, 0.5);
+
+  /* Typography */
+  --font-arabic: 'IBM Plex Sans Arabic', -apple-system, sans-serif;
+  --font-numbers: 'Plus Jakarta Sans', sans-serif;
+
+  --color-text-primary: #fbf9f5;
+  --color-text-secondary: #9faea6;
+  --color-text-tertiary: #586b62;
+  --color-text-gold: #e5c358;
+
+  /* Status */
+  --color-status-success: #10b981;
+  --color-status-warning: #f59e0b;
+  --color-status-error: #f43f5e;
+
+  /* Radii & Shadows */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  --shadow-ambient: 0 20px 40px rgba(0, 0, 0, 0.7);
+  --shadow-gold: 0 8px 24px rgba(212, 175, 55, 0.2);
+  --shadow-emerald: 0 10px 28px rgba(13, 62, 48, 0.5);
+}

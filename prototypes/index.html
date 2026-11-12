@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>وصّلني | WASSLNI - نقل مغربي فاخر</title>
+  
+  <!-- PWA Meta Tags & Manifest for Installability -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0D3E30">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="وصّلني">
+  <link rel="apple-touch-icon" href="/icons/icon.svg">
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+
+  <!-- Fonts: Plus Jakarta Sans for numbers/Latin & IBM Plex Sans Arabic for authentic Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet Map Engine for REAL Interactive Vector Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <style>
+    :root {
+      /* Ultra-Luxury Moroccan Palette */
+      --primary-emerald: #0D3E30;
+      --primary-emerald-glow: rgba(13, 62, 48, 0.45);
+      --primary-emerald-light: #185E49;
+      --accent-gold: #D4AF37;
+      --accent-gold-light: #F3E5AB;
+      --accent-gold-glow: rgba(212, 175, 55, 0.35);
+
+      /* Canvas & Glassmorphism Surfaces */
+      --bg-canvas: #070908;
+      --bg-surface: #0E1311;
+      --bg-surface-elevated: #161E1A;
+      --bg-glass-card: rgba(14, 19, 17, 0.82);
+      --bg-glass-sheet: rgba(10, 14, 12, 0.92);
+
+      /* Borders */
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-gold: rgba(212, 175, 55, 0.28);
+      --border-emerald: rgba(24, 94, 73, 0.5);
+
+      /* Typography */
+      --text-primary: #FBF9F5;
+      --text-secondary: #9FAEA6;
+      --text-tertiary: #586B62;
+      --text-gold: #E5C358;
+
+      /* Feedback */
+      --status-success: #10B981;
+      --status-warning: #F59E0B;
+      --status-error: #F43F5E;
+
+      /* Radii & Shadows */
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --radius-full: 9999px;
+
+      --shadow-ambient: 0 20px 40px rgba(0, 0, 0, 0.7);
+      --shadow-gold: 0 8px 24px rgba(212, 175, 55, 0.2);
+      --shadow-emerald: 0 10px 28px rgba(13, 62, 48, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'IBM Plex Sans Arabic', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 20%, #0d1713 0%, #050706 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 10px;
+      overflow-x: hidden;
+    }
+
+    /* Install App Prompt Bar */
+    .install-banner {
+      width: 100%;
+      max-width: 480px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(13, 62, 48, 0.4));
+      border: 1px solid var(--accent-gold);
+      border-radius: var(--radius-lg);
+      padding: 12px 18px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-gold);
+      animation: pulseBanner 2.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseBanner {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-3px); }
+    }
+
+    .install-banner-text {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .btn-download-app {
+      background: linear-gradient(135deg, var(--accent-gold), #B38F24);
+      color: #070908;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-download-app:active { transform: scale(0.94); }
+
+    /* Subtle Moroccan Geometric Watermark */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Showcase Top Bar Controls */
+    .showcase-nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--primary-emerald) 0%, #061D15 100%);
+      border: 1px solid var(--accent-gold);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: var(--shadow-gold);
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFF 40%, var(--accent-gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      color: var(--accent-gold);
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+    }
+
+    /* Screen Selector Segmented Pills */
+    .screen-pills-bar {
+      display: flex;
+      gap: 6px;
+      background: rgba(18, 25, 22, 0.75);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      padding: 5px;
+      border-radius: var(--radius-full);
+      overflow-x: auto;
+      max-width: 100%;
+      scrollbar-width: none;
+    }
+
+    .screen-pills-bar::-webkit-scrollbar { display: none; }
+
+    .pill-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pill-btn.active {
+      background: linear-gradient(135deg, var(--primary-emerald-light), var(--primary-emerald));
+      color: #FFF;
+      box-shadow: 0 4px 14px rgba(13, 62, 48, 0.6);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    /* Titanium Mobile Frame */
+    .device-shell {
+      position: relative;
+      z-index: 10;
+      width: 412px;
+      max-width: 100%;
+      height: 844px;
+      background: var(--bg-canvas);
+      border-radius: 50px;
+      border: 10px solid #1A211D;
+      box-shadow: 
+        0 0 0 1px rgba(212, 175, 55, 0.2),
+        0 30px 80px rgba(0, 0, 0, 0.95),
+        inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Dynamic Island / Speaker Notch */
+    .dynamic-island {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 28px;
+      background: #000;
+      border-radius: var(--radius-full);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+    }
+
+    .island-lens {
+      width: 10px;
+      height: 10px;
+      background: #111;
+      border-radius: 50%;
+      box-shadow: inset 0 0 2px #333;
+    }
+
+    .island-sensor {
+      width: 7px;
+      height: 7px;
+      background: #0d1e16;
+      border-radius: 50%;
+    }
+
+    /* Screen Views Manager */
+    .screen {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .screen.active {
+      display: flex;
+      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.985); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Real Leaflet Map Container */
+    #real-map {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      background: #0c120f;
+    }
+
+    /* Custom Dark Leaflet Tiles Inversion filter */
+    .leaflet-tile {
+      filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+    }
+
+    .leaflet-control-attribution { display: none !important; }
+
+    /* Map Overlays & Floating Top Bar */
+    .top-floating-bar {
+      position: relative;
+      z-index: 500;
+      padding: 48px 18px 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .top-floating-bar > * { pointer-events: auto; }
+
+    .glass-icon-btn {
+      width: 44px;
+      height: 44px;
+      background: rgba(14, 19, 17, 0.85);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s;
+    }
+
+    .glass-icon-btn:active { transform: scale(0.92); }
+
+    .glass-pill-location {
+      background: rgba(14, 19, 17, 0.88);
+      backdrop-filter: blur(25px);
+      border: 1px solid var(--border-gold);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-gold);
+    }
+
+    /* Premium Bottom Sheet Container */
+    .floating-sheet {
+      position: relative;
+      margin-top: auto;
+      z-index: 500;
+      background: var(--bg-glass-sheet);
+      backdrop-filter: blur(35px) saturate(180%);
+      -webkit-backdrop-filter: blur(35px) saturate(180%);
+      border-top-left-radius: var(--radius-xl);
+      border-top-right-radius: var(--radius-xl);
+      border-top: 1px solid rgba(212, 175, 55, 0.35);
+      border-left: 1px solid var(--border-subtle);
+      border-right: 1px solid var(--border-subtle);
+      padding: 16px 20px 28px 20px;
+      box-shadow: var(--shadow-ambient);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sheet-handle-bar {
+      width: 42px;
+      height: 4.5px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-full);
+      margin: 0 auto 6px auto;
+    }
+
+    /* Inputs with Luxurious Moroccan styling */
+    .search-card-trigger {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 18px;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-card-trigger:hover {
+      border-color: var(--accent-gold);
+    }
+
+    .mic-button-darja {
+      margin-right: auto;
+      width: 38px;
+      height: 38px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--status-success);
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Categories Selector Cards */
+    .categories-carousel {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .cat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cat-card.selected {
+      background: linear-gradient(180deg, rgba(212, 175, 55, 0.12) 0%, rgba(13, 62, 48, 0.25) 100%);
+      border-color: var(--accent-gold);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .cat-card.selected::after {
+      content: "✓";
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+
+    .cat-icon { font-size: 26px; margin-bottom: 6px; }
+    .cat-title { font-size: 13.5px; font-weight: 700; color: var(--text-primary); }
+    .cat-price { 
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-top: 3px;
+    }
+
+    /* Negotiation Stepper Masterpiece */
+    .negotiation-panel {
+      background: linear-gradient(135deg, rgba(22, 30, 26, 0.9) 0%, rgba(14, 19, 17, 0.95) 100%);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--shadow-gold);
+      position: relative;
+    }
+
+    .stepper-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin: 14px 0 8px 0;
+    }
+
+    .stepper-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--bg-surface-elevated);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: var(--accent-gold);
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .stepper-btn:active { transform: scale(0.9); }
+
+    .price-value-container {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .price-number {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 46px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -1px;
+    }
+
+    .price-currency {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+
+    /* Grand Action Button */
+    .btn-grand-action {
+      width: 100%;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary-emerald-light) 0%, var(--primary-emerald) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: var(--radius-md);
+      color: #FFF;
+      font-size: 16.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: var(--shadow-emerald);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-grand-action:active {
+      transform: scale(0.98);
+      filter: brightness(1.1);
+    }
+
+    /* Live Bid Driver Card */
+    .bid-card-luxury {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bid-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .driver-identity {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .driver-photo-ring {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #18221D;
+      border: 2px solid var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: var(--shadow-gold);
+    }
+
+    .driver-details h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .driver-details p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .bid-amount {
+      text-align: left;
+    }
+
+    .bid-amount .value {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+
+    /* Custom Leaflet Driver Pin Marker */
+    .custom-car-pin {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--primary-emerald) 0%, #061D15 100%);
+      border: 2px solid var(--accent-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8);
+      animation: carPulse 2.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes carPulse {
+      0% { transform: scale(1) translateY(0); }
+      100% { transform: scale(1.08) translateY(-4px); }
+    }
+
+    /* SOS Alert Capsule */
+    .sos-capsule {
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      color: var(--status-error);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    /* Moroccan Landmark Chip */
+    .landmark-box {
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px dashed rgba(212, 175, 55, 0.35);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 12.5px;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Install PWA Banner -->
+  <div class="install-banner" id="pwa-install-bar">
+    <div class="install-banner-text">
+      <span style="font-size: 20px;">📲</span>
+      <span>ثبّت تطبيق وصّلني على هاتفك أو حاسوبك</span>
+    </div>
+    <button class="btn-download-app" id="pwa-install-btn" onclick="triggerPwaInstall()">
+      <span>تحميل التطبيق</span>
+      <span>⬇️</span>
+    </button>
+  </div>
+
+  <!-- Screen Switcher Header -->
+  <div class="showcase-nav">
+    <div class="app-brand">
+      <div class="brand-icon">🇲🇦</div>
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <h1 class="brand-title">وصّلني</h1>
+          <span class="brand-tag">ÉDITION LUXE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-pills-bar">
+      <a href="/install.html" class="pill-btn" style="background: rgba(212,175,55,0.22); border: 1px solid var(--accent-gold); color: var(--accent-gold-light); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 700;">📲 تثبيت على الهاتف (QR)</a>
+      <button class="pill-btn active" onclick="showScreen('screen-rider-home')">1. الرئيسية الخريطة</button>
+      <button class="pill-btn" onclick="showScreen('screen-negotiation')">2. اقتراح السعر</button>
+      <button class="pill-btn" onclick="showScreen('screen-bidding-radar')">3. رادار العروض</button>
+      <button class="pill-btn" onclick="showScreen('screen-active-trip')">4. أثناء الرحلة</button>
+      <button class="pill-btn" onclick="showScreen('screen-driver-cockpit')">5. قمرة السائق</button>
+      <button class="pill-btn" onclick="showScreen('screen-driver-wallet')">6. المحفظة والعمولة</button>
+    </div>
+  </div>
+
+  <!-- Master Mobile Titanium Shell -->
+  <div class="device-shell">
+    
+    <!-- iPhone-style Dynamic Island -->
+    <div class="dynamic-island">
+      <div class="island-lens"></div>
+      <div class="island-sensor"></div>
+    </div>
+
+    <!-- ==================== SCREEN 1: RIDER REAL MAP & SEARCH ==================== -->
+    <div id="screen-rider-home" class="screen active">
+      <!-- Real Interactive Map Container -->
+      <div id="real-map"></div>
+
+      <!-- Top Overlay -->
+      <div class="top-floating-bar">
+        <div class="glass-icon-btn" onclick="alert('القائمة الرئيسية: الملف الشخصي، الأماكن المفضلة، الدعم بالدارجة')">☰</div>
+        <div class="glass-pill-location">
+          <span>🇲🇦</span>
+          <span>الدار البيضاء • كازا</span>
+        </div>
+        <div class="glass-icon-btn">🔔</div>
+      </div>
+
+      <!-- Bottom Sheet Booking Trigger -->
+      <div class="floating-sheet">
+        <div class="sheet-handle-bar"></div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <h3 style="font-size: 18px; font-weight: 800; color: #FFF;">أهلاً بك، فين غادي اليوم؟</h3>
+          <span style="font-size: 12px; color: var(--accent-gold); font-weight: 600;">سعرك باختيارك ⚡</span>
+        </div>
+
+        <div class="search-card-trigger" onclick="showScreen('screen-negotiation')">
+          <span style="font-size: 20px;">📍</span>
+          <div>
+            <div style="font-size: 14.5px; font-weight: 700; color: #FFF;">إلى أين وجهتك؟</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">حدد وجهتك على الخريطة أو ابحث</div>
+          </div>
+          <div class="mic-button-darja" title="إدخال صوتي بالدارجة المغربية">🎙️</div>
+        </div>
+
+        <!-- Saved Places Quick Chips -->
+        <div style="display: flex; gap: 8px;">
+          <div class="search-card-trigger" style="flex: 1; padding: 10px 12px; border-radius: 14px;" onclick="showScreen('screen-negotiation')">
+            <span>🏠</span>
+            <span style="font-size: 12.5px; font-weight: 600;">الدار (المعاريف)</span>
+          </div>
+          <div class="search-card-trigger" style="flex: 1; padding: 10px 12px; border-radius: 14px;" onclick="showScreen('screen-negotiation')">
+            <span>💼</span>
+            <span style="font-size: 12.5px; font-weight: 600;">الخدمة (كازا نيرشور)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SCREEN 2: NEGOTIATION & CATEGORIES ==================== -->
+    <div id="screen-negotiation" class="screen">
+      <div class="top-floating-bar" style="background: rgba(14, 19, 17, 0.95); padding-bottom: 14px;">
+        <div class="glass-icon-btn" onclick="showScreen('screen-rider-home')">→</div>
+        <div style="font-size: 16px; font-weight: 700; color: #FFF;">اقتراح وتفاوض السعر</div>
+        <div style="width: 44px;"></div>
+      </div>
+
+      <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px; flex: 1; overflow-y: auto;">
+        
+        <!-- Address & Landmark Card -->
+        <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 16px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--status-success); box-shadow: 0 0 10px var(--status-success);"></div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-tertiary);">نقطة الانطلاق</div>
+              <div style="font-size: 14px; font-weight: 700; color: #FFF;">شارع الزرقطوني (قرب توين سنتر)</div>
+            </div>
+          </div>
+          <div style="height: 1px; background: var(--border-subtle); margin: 12px 0 12px 24px;"></div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--status-error); box-shadow: 0 0 10px var(--status-error);"></div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-tertiary);">الوجهة</div>
+              <div style="font-size: 14px; font-weight: 700; color: #FFF;">موروكو مول، عين الذياب</div>
+            </div>
+          </div>
+
+          <!-- Moroccan Landmark Helper -->
+          <div class="landmark-box" style="margin-top: 14px;">
+            <span>🕌</span>
+            <div><strong>المعلم القريب:</strong> قبالة الباب رقم 2 حدا النافورة الكبيرة</div>
+          </div>
+        </div>
+
+        <!-- Vehicle Tier Carousel -->
+        <div class="categories-carousel">
+          <div class="cat-card selected" onclick="selectTier(this, 28)">
+            <div class="cat-icon">🚗</div>
+            <div class="cat-title">اقتصادي</div>
+            <div class="cat-price">28 MAD</div>
+          </div>
+          <div class="cat-card" onclick="selectTier(this, 40)">
+            <div class="cat-icon">🚘</div>
+            <div class="cat-title">مريح</div>
+            <div class="cat-price">40 MAD</div>
+          </div>
+          <div class="cat-card" onclick="selectTier(this, 28)">
+            <div class="cat-icon">👩</div>
+            <div class="cat-title">سائقة فقط</div>
+            <div class="cat-price">28 MAD</div>
+          </div>
+        </div>
+
+        <!-- The inDrive Price Stepper -->
+        <div class="negotiation-panel">
+          <div style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">
+            اقترح سعرك للرحلة (درهم مغربي)
+          </div>
+
+          <div class="stepper-row">
+            <button class="stepper-btn" onclick="alterPrice(-2)">−</button>
+            <div class="price-value-container">
+              <span id="price-number" class="price-number">30</span>
+              <span class="price-currency">MAD</span>
+            </div>
+            <button class="stepper-btn" onclick="alterPrice(2)">+</button>
+          </div>
+
+          <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">
+            السعر المرجعي المحسوب: <strong style="color: var(--accent-gold);">28 MAD</strong> (المسافة: 7.8 كم)
+          </div>
+        </div>
+
+        <!-- Payment selector -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); padding: 14px 18px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 18px;">💵</span>
+            <span style="font-size: 13.5px; font-weight: 600;">الدفع: <strong>نقداً كاش للسائق</strong></span>
+          </div>
+          <span style="color: var(--accent-gold); font-size: 12px; font-weight: 700; cursor: pointer;">تغيير</span>
+        </div>
+
+        <!-- Find Drivers Button -->
+        <button class="btn-grand-action" style="margin-top: auto;" onclick="showScreen('screen-bidding-radar')">
+          <span>🚀 ابحث عن سائقين واعرض سعرك</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== SCREEN 3: LIVE BIDDING RADAR ==================== -->
+    <div id="screen-bidding-radar" class="screen">
+      <div class="top-floating-bar" style="background: rgba(14, 19, 17, 0.95);">
+        <div class="glass-icon-btn" onclick="showScreen('screen-negotiation')">✕</div>
+        <div style="text-align: center;">
+          <div style="font-size: 15px; font-weight: 700; color: #FFF;">رادار العروض الحية</div>
+          <div style="font-size: 12px; color: var(--status-warning); font-weight: 600;">المهلة: 01:42 ⏱️</div>
+        </div>
+        <div style="width: 44px;"></div>
+      </div>
+
+      <div style="padding: 18px; display: flex; flex-direction: column; gap: 14px; flex: 1;">
+        <!-- Pulsing Radar Banner -->
+        <div style="background: linear-gradient(135deg, rgba(13, 62, 48, 0.3) 0%, rgba(212, 175, 55, 0.1) 100%); border: 1px solid var(--border-emerald); border-radius: var(--radius-lg); padding: 16px; text-align: center;">
+          <div style="font-size: 13px; color: var(--text-secondary);">سعرك المعروض حالياً:</div>
+          <div style="font-size: 32px; font-weight: 800; color: var(--accent-gold); font-family: 'Plus Jakarta Sans', sans-serif;">30 MAD</div>
+          <div style="font-size: 12px; color: var(--status-success); margin-top: 4px;">📡 يتم بث طلبك الآن لـ 9 سائقين في محيطك</div>
+        </div>
+
+        <div style="font-size: 13.5px; font-weight: 700; color: var(--text-secondary); margin-top: 6px;">
+          عروض السائقين الواردة فورياً (2):
+        </div>
+
+        <!-- Driver Bid 1 -->
+        <div class="bid-card-luxury">
+          <div class="bid-header">
+            <div class="driver-identity">
+              <div class="driver-photo-ring">👨‍✈️</div>
+              <div class="driver-details">
+                <h4>ياسين العلمي</h4>
+                <p>⭐ 4.95 (1,420 رحلة) • داسيا لوغان</p>
+              </div>
+            </div>
+            <div class="bid-amount">
+              <div class="value">30 MAD</div>
+              <div style="font-size: 11px; color: var(--status-success); font-weight: 700;">قبل سعرك ✅</div>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary);">
+            <span>⏱️ يصل إليك خلال: 3 دقائق (800 متر)</span>
+            <span>لوحة: 26-أ-9841</span>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 4px;">
+            <button style="flex: 1; height: 44px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-secondary); font-weight: 600; cursor: pointer;">تخطي</button>
+            <button style="flex: 2; height: 44px; background: linear-gradient(135deg, var(--primary-emerald-light), var(--primary-emerald)); border: 1px solid var(--border-gold); border-radius: var(--radius-md); color: #FFF; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-emerald);" onclick="showScreen('screen-active-trip')">قبول بـ 30 MAD</button>
+          </div>
+        </div>
+
+        <!-- Driver Bid 2 -->
+        <div class="bid-card-luxury">
+          <div class="bid-header">
+            <div class="driver-identity">
+              <div class="driver-photo-ring">👨‍✈️</div>
+              <div class="driver-details">
+                <h4>عمر الشرايبي</h4>
+                <p>⭐ 4.89 (850 رحلة) • رونو كليو 5</p>
+              </div>
+            </div>
+            <div class="bid-amount">
+              <div class="value" style="color: var(--status-warning);">34 MAD</div>
+              <div style="font-size: 11px; color: var(--status-warning); font-weight: 700;">+4 دراهم للتكييف</div>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary);">
+            <span>⏱️ يصل إليك خلال: 5 دقائق (1.2 كم)</span>
+            <span>لوحة: 6-ب-4410</span>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 4px;">
+            <button style="flex: 1; height: 44px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-secondary); font-weight: 600; cursor: pointer;">تخطي</button>
+            <button style="flex: 2; height: 44px; background: linear-gradient(135deg, #1C2B24, #121B17); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: #FFF; font-weight: 700; cursor: pointer;" onclick="showScreen('screen-active-trip')">قبول بـ 34 MAD</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SCREEN 4: TRIP IN PROGRESS & SOS ==================== -->
+    <div id="screen-active-trip" class="screen">
+      <!-- Simulated Dark Route Map -->
+      <div id="real-map-trip" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0B110E;"></div>
+
+      <div class="top-floating-bar">
+        <div class="sos-capsule" onclick="alert('🚨 تم تفعيل بروتوكول SOS: إرسال موقعك المباشر لشرطة النجدة (19) وجهات الاتصال الموثوقة')">
+          <span>🚨</span>
+          <span>طوارئ SOS (19/15)</span>
+        </div>
+        <div class="glass-pill-location" style="border-color: var(--status-success);">
+          <span style="color: var(--status-success);">●</span>
+          <span>السائق في الطريق إليك</span>
+        </div>
+        <div class="glass-icon-btn">💬</div>
+      </div>
+
+      <!-- Bottom Trip Details Card -->
+      <div class="floating-sheet">
+        <div class="sheet-handle-bar"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="driver-identity">
+            <div class="driver-photo-ring" style="width: 56px; height: 56px; font-size: 28px;">👨‍✈️</div>
+            <div class="driver-details">
+              <h3 style="font-size: 17px; font-weight: 800; color: #FFF;">ياسين العلمي</h3>
+              <p style="font-size: 13px;">داسيا لوغان رمادية • 26-أ-9841</p>
+              <p style="color: var(--accent-gold); font-weight: 700; font-size: 12px;">⭐ 4.95 (1,420 رحلة)</p>
+            </div>
+          </div>
+          <div style="text-align: left;">
+            <div style="font-size: 26px; font-weight: 800; color: var(--accent-gold); font-family: 'Plus Jakarta Sans', sans-serif;">30 MAD</div>
+            <div style="font-size: 11px; color: var(--text-tertiary);">نقداً كاش</div>
+          </div>
+        </div>
+
+        <div style="background: var(--bg-surface-elevated); border-radius: var(--radius-md); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 13px; color: var(--text-secondary);">⏱️ وقت الوصول المقدر:</span>
+          <strong style="color: var(--status-success); font-size: 14px;">3 دقائق (حوالي 800 متر)</strong>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <button style="flex: 1; height: 48px; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: #FFF; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+            <span>📞</span> <span>اتصال مقنع</span>
+          </button>
+          <button style="flex: 1; height: 48px; background: #25D366; border: none; border-radius: var(--radius-md); color: #FFF; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);">
+            <span>📲</span> <span>مشاركة واتساب</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SCREEN 5: DRIVER COCKPIT & OFFERS ==================== -->
+    <div id="screen-driver-cockpit" class="screen">
+      <div class="top-floating-bar" style="background: rgba(14, 19, 17, 0.95);">
+        <div class="glass-icon-btn">☰</div>
+        <div style="font-size: 16px; font-weight: 800; color: var(--accent-gold);">وصّلني كابتن 🇲🇦</div>
+        <div class="glass-icon-btn">🔔 2</div>
+      </div>
+
+      <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px; flex: 1; overflow-y: auto;">
+        <!-- 0% Commission Hero Badge -->
+        <div style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(13, 62, 48, 0.45) 100%); border: 1px solid var(--accent-gold); border-radius: var(--radius-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-gold);">
+          <div>
+            <div style="font-size: 14px; font-weight: 800; color: #FFF;">أنت في العرض الترويجي المجاني!</div>
+            <div style="font-size: 12px; color: var(--accent-gold-light); margin-top: 2px;">0% عمولة على كافة رحلاتك</div>
+          </div>
+          <div style="text-align: center; background: rgba(0, 0, 0, 0.4); padding: 8px 14px; border-radius: var(--radius-md); border: 1px solid rgba(212, 175, 55, 0.3);">
+            <div style="font-size: 24px; font-weight: 800; color: var(--accent-gold); font-family: 'Plus Jakarta Sans', sans-serif;">48</div>
+            <div style="font-size: 10px; color: var(--text-secondary);">يوماً متبقية</div>
+          </div>
+        </div>
+
+        <!-- Today Stats 3-Col Grid -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+          <div style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 11px; color: var(--text-tertiary);">أرباح اليوم</div>
+            <div style="font-size: 18px; font-weight: 800; color: var(--accent-gold); margin-top: 4px; font-family: 'Plus Jakarta Sans', sans-serif;">340 MAD</div>
+          </div>
+          <div style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 11px; color: var(--text-tertiary);">الرحلات</div>
+            <div style="font-size: 18px; font-weight: 800; color: #FFF; margin-top: 4px; font-family: 'Plus Jakarta Sans', sans-serif;">8</div>
+          </div>
+          <div style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 11px; color: var(--text-tertiary);">التقييم</div>
+            <div style="font-size: 18px; font-weight: 800; color: var(--status-success); margin-top: 4px;">⭐ 4.96</div>
+          </div>
+        </div>
+
+        <!-- Incoming Request Card for Driver -->
+        <div style="background: var(--bg-surface-elevated); border: 1.5px solid var(--accent-gold); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-gold);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="background: rgba(16, 185, 129, 0.2); color: var(--status-success); padding: 4px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 800;">طلب زبون مباشر</span>
+            <span style="color: var(--status-error); font-size: 12px; font-weight: 800;">مهلة الرد: 22 ثانية ⏱️</span>
+          </div>
+
+          <div style="font-size: 13.5px; margin-bottom: 6px;">📍 <strong>من:</strong> عين السبع (حدا مرجان) <small style="color: var(--text-tertiary);">(1.1 كم منك)</small></div>
+          <div style="font-size: 13.5px; margin-bottom: 14px;">🏁 <strong>إلى:</strong> سيدي بليوط (شارع الجيش الملكي)</div>
+
+          <div style="text-align: center; background: rgba(0, 0, 0, 0.35); padding: 12px; border-radius: var(--radius-md); margin-bottom: 14px;">
+            <div style="font-size: 12px; color: var(--text-secondary);">السعر المقترح من الراكب:</div>
+            <div style="font-size: 34px; font-weight: 800; color: var(--accent-gold); font-family: 'Plus Jakarta Sans', sans-serif;">35 MAD</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn-grand-action" onclick="alert('تم قبول الرحلة بنجاح بـ 35 MAD! الخريطة توجهك لموقع الراكب.')">
+              ✅ قبول بـ 35 MAD فوراً
+            </button>
+            <div style="display: flex; gap: 8px;">
+              <button style="flex: 1; height: 42px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: #FFF; font-weight: 700; cursor: pointer;">عرض 38</button>
+              <button style="flex: 1; height: 42px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: #FFF; font-weight: 700; cursor: pointer;">عرض 40</button>
+              <button style="flex: 1; height: 42px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: #FFF; font-weight: 700; cursor: pointer;">عرض 45</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: auto; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-md); padding: 14px; text-align: center;">
+          <div style="font-size: 13.5px; font-weight: 700; color: var(--status-success);">🟢 أنت متصل وجاهز لاستقبال طلبات الركاب</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SCREEN 6: DRIVER WALLET & REFERRALS ==================== -->
+    <div id="screen-driver-wallet" class="screen">
+      <div class="top-floating-bar" style="background: rgba(14, 19, 17, 0.95);">
+        <div class="glass-icon-btn" onclick="showScreen('screen-driver-cockpit')">→</div>
+        <div style="font-size: 16px; font-weight: 800; color: #FFF;">المحفظة وبرنامج الدعوة</div>
+        <div style="width: 44px;"></div>
+      </div>
+
+      <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px; flex: 1; overflow-y: auto;">
+        <!-- Wallet Emerald Card -->
+        <div style="background: linear-gradient(135deg, var(--primary-emerald-light) 0%, #061F17 100%); border-radius: var(--radius-lg); padding: 22px; border: 1px solid var(--accent-gold); box-shadow: var(--shadow-emerald);">
+          <div style="font-size: 13px; color: var(--accent-gold-light);">رصيد أرباح السائق القابل للسحب</div>
+          <div style="font-size: 38px; font-weight: 800; color: #FFF; margin: 8px 0; font-family: 'Plus Jakarta Sans', sans-serif;">
+            1,280.00 <span style="font-size: 20px; color: var(--accent-gold);">MAD</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--status-success);">
+            <span>العمولة المستحقة: 0.00 MAD (مجاناً)</span>
+            <button style="background: var(--accent-gold); color: #000; border: none; padding: 7px 14px; border-radius: var(--radius-sm); font-weight: 800; cursor: pointer;">سحب الأرباح</button>
+          </div>
+        </div>
+
+        <!-- Referral Program Card -->
+        <div style="background: var(--bg-surface-elevated); border-radius: var(--radius-lg); padding: 18px; border: 1px solid var(--border-subtle);">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <span style="font-size: 22px;">🎁</span>
+            <h4 style="font-size: 15px; font-weight: 800; color: var(--accent-gold);">برنامج أبطال وصّلني (دعوة السائقين)</h4>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px;">
+            عند تسجيل أي سائق جديد بكودك وإكماله <strong>5 رحلات فعلية</strong>: تحصل على <strong>شهر إضافي بدون عمولة</strong>، ويحصل المدعو على أسبوع إضافي مجاني!
+          </p>
+
+          <div style="background: rgba(0, 0, 0, 0.4); border: 1px dashed var(--accent-gold); border-radius: var(--radius-md); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 800; color: #FFF; letter-spacing: 2px;">YASSINE-WSL7</span>
+            <span style="color: var(--accent-gold); font-size: 13px; font-weight: 700; cursor: pointer;" onclick="alert('تم نسخ الكود YASSINE-WSL7 بنجاح!')">📋 نسخ الكود</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: center; margin-bottom: 14px;">
+            <div style="background: var(--bg-surface); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <div style="font-size: 11px; color: var(--text-tertiary);">المدعوون المسجلون</div>
+              <div style="font-size: 18px; font-weight: 800; color: #FFF; margin-top: 2px;">4 سائقين</div>
+            </div>
+            <div style="background: var(--bg-surface); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <div style="font-size: 11px; color: var(--text-tertiary);">أشهر مجانية مكتسبة</div>
+              <div style="font-size: 18px; font-weight: 800; color: var(--accent-gold); margin-top: 2px;">2 من 6 أشهر</div>
+            </div>
+          </div>
+
+          <button class="btn-grand-action" style="background: #25D366; border: none; height: 48px; box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);">
+            <span>📲 مشاركة رابط الدعوة عبر واتساب</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Register PWA Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then((reg) => {
+          console.log('✅ Wasslni Service Worker registered successfully', reg.scope);
+        }).catch((err) => {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+
+    // PWA Install Prompt Listener
+    let deferredPrompt;
+    const installBanner = document.getElementById('pwa-install-bar');
+    const installBtn = document.getElementById('pwa-install-btn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (installBanner) installBanner.style.display = 'flex';
+    });
+
+    function triggerPwaInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the Wasslni PWA install');
+            if (installBanner) installBanner.style.display = 'none';
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        // Fallback guidance for Chrome/Safari
+        alert('لتثبيت التطبيق على جهازك أو هاتفك:\n• في Google Chrome: انقر على أيقونة التثبيت ⊕ في شريط العنوان بالأعلى.\n• في iPhone (Safari): اضغط على زر المشاركة ثم اختر "إضافة إلى الصفحة الرئيسية" (Add to Home Screen).');
+      }
+    }
+
+    // Initialize Real Leaflet Map of Casablanca with Moroccan Luxury Dark Tile Layer
+    let map;
+    function initMap() {
+      const casaLat = 33.5898;
+      const casaLng = -7.6038;
+
+      map = L.map('real-map', {
+        zoomControl: false,
+        attributionControl: false
+      }).setView([casaLat, casaLng], 14);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+      }).addTo(map);
+
+      const carIcon = L.divIcon({
+        className: 'custom-car-pin-container',
+        html: '<div class="custom-car-pin">🚕</div>',
+        iconSize: [42, 42],
+        iconAnchor: [21, 21]
+      });
+
+      L.marker([33.5880, -7.6010], { icon: carIcon }).addTo(map).bindPopup("كابتن كريم (داسيا لوغان) - 3 دقائق");
+      L.marker([33.5930, -7.6080], { icon: carIcon }).addTo(map).bindPopup("كابتن ياسين (رونو كليو) - 5 دقائق");
+      L.marker([33.5840, -7.6120], { icon: carIcon }).addTo(map).bindPopup("كابتن عادل (فيات تيبو) - 4 دقائق");
+      L.marker([33.5790, -7.5950], { icon: carIcon }).addTo(map);
+    }
+
+    window.addEventListener('DOMContentLoaded', initMap);
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+
+      const targetScreen = document.getElementById(screenId);
+      if (targetScreen) targetScreen.classList.add('active');
+
+      const activeBtn = Array.from(document.querySelectorAll('.pill-btn')).find(b => b.getAttribute('onclick').includes(screenId));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (screenId === 'screen-rider-home' && map) {
+        setTimeout(() => map.invalidateSize(), 200);
+      }
+    }
+
+    let currentPrice = 30;
+    function alterPrice(delta) {
+      currentPrice = Math.max(12, Math.min(90, currentPrice + delta));
+      document.getElementById('price-number').innerText = currentPrice;
+    }
+
+    function selectTier(cardElement, basePrice) {
+      document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+      cardElement.classList.add('selected');
+      currentPrice = basePrice;
+      document.getElementById('price-number').innerText = currentPrice;
+    }
+  </script>
+</body>
+</html>

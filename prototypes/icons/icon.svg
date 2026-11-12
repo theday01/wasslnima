@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D3E30"/>
+      <stop offset="100%" stop-color="#041811"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3E5AB"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#AA820A"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#D4AF37" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  
+  <!-- Outer Rounded Square Background -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  <rect x="8" y="8" width="496" height="496" rx="120" fill="none" stroke="url(#goldGrad)" stroke-width="4" opacity="0.6"/>
+  
+  <!-- Moroccan Star Accent Pattern in Background -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#165E49" stroke-width="2" stroke-dasharray="8 6" opacity="0.4"/>
+  
+  <!-- Stylized Luxury Car / Taxi Icon -->
+  <g filter="url(#glow)">
+    <!-- Car Body -->
+    <path d="M140 280 L180 180 C190 160 210 150 240 150 L272 150 C302 150 322 160 332 180 L372 280 C390 285 400 300 400 320 L400 370 C400 380 390 390 380 390 L360 390 C350 390 340 380 340 370 L340 360 L172 360 L172 370 C172 380 162 390 152 390 L132 390 C122 390 112 380 112 370 L112 320 C112 300 122 285 140 280 Z" fill="url(#goldGrad)"/>
+    
+    <!-- Windshield -->
+    <path d="M190 200 L322 200 L344 265 L168 265 Z" fill="#0D3E30" opacity="0.95"/>
+    
+    <!-- Headlights -->
+    <circle cx="160" cy="305" r="18" fill="#FFF" opacity="0.9"/>
+    <circle cx="352" cy="305" r="18" fill="#FFF" opacity="0.9"/>
+    
+    <!-- Taxi Crown / Top Sign -->
+    <rect x="226" y="125" width="60" height="20" rx="6" fill="#FFF"/>
+  </g>
+  
+  <!-- Arabic Brand Typography: وصّلني -->
+  <text x="256" y="450" font-family="'IBM Plex Sans Arabic', sans-serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle" letter-spacing="1">وصّلني</text>
+</svg>
+

@@ -1,0 +1,22 @@
+{
+  "name": "وصّلني | Wasslni",
+  "short_name": "وصّلني",
+  "description": "تطبيق النقل المغربي الحر بنموذج التفاوض على السعر",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070908",
+  "theme_color": "#0D3E30",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["travel", "transportation"],
+  "lang": "ar-MA",
+  "dir": "rtl"
+}
+

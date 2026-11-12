@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تثبيت وصّلني على هاتفك | Wasslni Mobile Install</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --primary-emerald: #0D3E30;
+      --accent-gold: #D4AF37;
+      --accent-gold-light: #F3E5AB;
+      --bg-canvas: #070908;
+      --bg-surface: #0E1311;
+      --bg-card: rgba(18, 26, 22, 0.95);
+      --border-gold: rgba(212, 175, 55, 0.35);
+      --text-primary: #FBF9F5;
+      --text-secondary: #9FAEA6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background: radial-gradient(circle at 50% 15%, #185E49 0%, var(--bg-canvas) 65%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .container {
+      max-width: 680px;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 28px;
+      padding: 36px 32px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 50px rgba(212, 175, 55, 0.15);
+      text-align: center;
+      backdrop-filter: blur(20px);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    h1 span {
+      background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .qr-box {
+      background: #FFFFFF;
+      padding: 20px;
+      border-radius: 20px;
+      display: inline-block;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    #qrcode img {
+      margin: 0 auto;
+      border-radius: 8px;
+    }
+    .url-pill {
+      font-family: 'Plus Jakarta Sans', monospace;
+      direction: ltr;
+      display: inline-block;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 10px 20px;
+      border-radius: 12px;
+      color: var(--accent-gold-light);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 28px;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 10px;
+      text-align: right;
+    }
+    .step-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px 14px;
+      position: relative;
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    .step-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .step-card p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .action-row {
+      margin-top: 30px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .btn {
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #185E49 0%, #0D3E30 100%);
+      color: #fff;
+      border: 1px solid var(--border-gold);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-primary);
+    }
+    .note {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #8C9992;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 16px;
+    }
+    @media (max-width: 600px) {
+      .steps { grid-template-columns: 1fr; }
+      .container { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge">🇲🇦 وصّلني | تجربة التطبيق المباشرة على هاتفك</div>
+    <h1>حمّل وثبّت <span>وصّلني</span> في ثوانٍ</h1>
+    <p class="subtitle">تطبيق كامل بواجهته الفاخرة، خريطة الدار البيضاء الحية، ونظام التفاوض والمزايدة المباشر</p>
+
+    <!-- QR Code Box -->
+    <div class="qr-box">
+      <div id="qrcode"></div>
+    </div>
+
+    <div>
+      <div class="url-pill" id="targetUrl">https://57c7d80aa2a858.lhr.life</div>
+    </div>
+
+    <!-- 3 Simple Steps -->
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>امسح الكود أو اضغط الرابط</h3>
+        <p>افتح كاميرا هاتفك وامسح رمز QR أعلاه، أو اضغط الرابط مباشرة من هاتفك.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>تثبيت فوري على هاتفك</h3>
+        <p>سيظهر لك شريط تلقائي في أسفل الشاشة أو اضغط القائمة (⋮) واختر <strong>"تثبيت التطبيق"</strong> (Install App).</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>تجربة كاملة كـ APK</h3>
+        <p>سيعمل التطبيق بكامل شاشته بأيقونته المستقلة وسرعة فائقة بدون أشرطة تصفح كأي تطبيق أصلي.</p>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <a href="https://57c7d80aa2a858.lhr.life" target="_blank" class="btn btn-primary">📱 فتح الرابط المباشر الآن</a>
+      <a href="/index.html" class="btn btn-secondary">🖥️ عرض نسخة الحاسوب</a>
+    </div>
+
+    <div class="note">
+      🔒 الرابط مؤمّن بـ HTTPS عالمي ومباشر — يعمل فوراً عبر الهاتف (سواء عبر الـ Wi-Fi أو بيانات الهاتف 4G/5G) وبدون أي قيود جدار حماية.
+    </div>
+  </div>
+
+  <script>
+    const liveMobileUrl = "https://57c7d80aa2a858.lhr.life";
+    document.getElementById('targetUrl').textContent = liveMobileUrl;
+    
+    new QRCode(document.getElementById("qrcode"), {
+      text: liveMobileUrl,
+      width: 220,
+      height: 220,
+      colorDark : "#070908",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,286 @@
+openapi: 3.1.0
+info:
+  title: Wasslni Platform API
+  description: API documentation for Wasslni (Moroccan ride-hailing app with price negotiation)
+  version: 1.0.0
+servers:
+  - url: https://api.wasslni.ma/api/v1
+    description: Production API Server
+  - url: http://localhost:3000/api/v1
+    description: Local Development Server
+
+paths:
+  /auth/send-otp:
+    post:
+      summary: Send OTP code to Moroccan phone number (+212)
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phoneNumber]
+              properties:
+                phoneNumber:
+                  type: string
+                  example: "+212612345678"
+                channel:
+                  type: string
+                  enum: [SMS, WHATSAPP]
+                  default: SMS
+      responses:
+        '200':
+          description: OTP dispatched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+
+  /auth/verify-otp:
+    post:
+      summary: Verify OTP code and issue JWT tokens
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phoneNumber, otpCode]
+              properties:
+                phoneNumber:
+                  type: string
+                  example: "+212612345678"
+                otpCode:
+                  type: string
+                  example: "482910"
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean, example: true }
+                  data:
+                    type: object
+                    properties:
+                      accessToken: { type: string }
+                      refreshToken: { type: string }
+                      user: { $ref: '#/components/schemas/UserProfile' }
+
+  /rides/estimate:
+    post:
+      summary: Calculate reference price and trip distance/duration
+      tags: [Pricing, Rides]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [pickupLat, pickupLng, dropoffLat, dropoffLng, categoryId]
+              properties:
+                pickupLat: { type: number, example: 33.5898 }
+                pickupLng: { type: number, example: -7.6038 }
+                dropoffLat: { type: number, example: 33.5731 }
+                dropoffLng: { type: number, example: -7.5898 }
+                categoryId: { type: string, example: "ECO" }
+      responses:
+        '200':
+          description: Price estimate computed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean, example: true }
+                  data:
+                    type: object
+                    properties:
+                      distanceKm: { type: number, example: 7.8 }
+                      durationMinutes: { type: integer, example: 16 }
+                      referencePriceMad: { type: number, example: 28.00 }
+                      minPriceMad: { type: number, example: 15.00 }
+                      maxPriceMad: { type: number, example: 60.00 }
+
+  /rides/requests:
+    post:
+      summary: Create a new ride negotiation request
+      tags: [Rides]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - categoryId
+                - pickupLat
+                - pickupLng
+                - pickupAddress
+                - dropoffLat
+                - dropoffLng
+                - dropoffAddress
+                - riderSuggestedPriceMad
+              properties:
+                categoryId: { type: string, example: "ECO" }
+                pickupLat: { type: number, example: 33.5898 }
+                pickupLng: { type: number, example: -7.6038 }
+                pickupAddress: { type: string, example: "Boulevard Zerktouni, Casablanca" }
+                pickupLandmark: { type: string, example: "حدا البنك الشعبي، قبالة الصيدلية" }
+                dropoffLat: { type: number, example: 33.5731 }
+                dropoffLng: { type: number, example: -7.5898 }
+                dropoffAddress: { type: string, example: "Morocco Mall, Casablanca" }
+                riderSuggestedPriceMad: { type: number, example: 30.00 }
+                paymentMethod:
+                  type: string
+                  enum: [CASH, WALLET, CARD_CMI]
+                  default: CASH
+      responses:
+        '201':
+          description: Ride request broadcasted to nearby drivers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideRequestDetails'
+
+  /rides/offers:
+    post:
+      summary: Driver submits a bid offer for a ride request
+      tags: [Rides, Offers]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requestId, offeredPriceMad, estimatedArrivalMinutes]
+              properties:
+                requestId: { type: string, format: uuid }
+                offeredPriceMad: { type: number, example: 35.00 }
+                estimatedArrivalMinutes: { type: integer, example: 4 }
+      responses:
+        '201':
+          description: Offer submitted and pushed to rider
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+
+  /rides/offers/{offerId}/accept:
+    post:
+      summary: Rider accepts driver offer and confirms ride
+      tags: [Rides, Offers]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Ride successfully confirmed and matched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideConfirmed'
+
+  /drivers/status:
+    put:
+      summary: Change driver operational status (ONLINE/OFFLINE)
+      tags: [Drivers]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [ONLINE, OFFLINE]
+                currentLat: { type: number, example: 33.5898 }
+                currentLng: { type: number, example: -7.6038 }
+      responses:
+        '200':
+          description: Status successfully updated
+
+  /safety/sos:
+    post:
+      summary: Trigger emergency SOS alert with live coordinates
+      tags: [Safety]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rideId, lat, lng]
+              properties:
+                rideId: { type: string, format: uuid }
+                lat: { type: number }
+                lng: { type: number }
+      responses:
+        '200':
+          description: SOS logged, dispatchers and emergency contacts notified
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    StandardResponse:
+      type: object
+      properties:
+        success: { type: boolean, example: true }
+        statusCode: { type: integer, example: 200 }
+        message: { type: string, example: "Success" }
+
+    UserProfile:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        phoneNumber: { type: string, example: "+212612345678" }
+        fullName: { type: string, example: "كريم الإدريسي" }
+        languagePreference: { type: string, example: "ar-MA" }
+        roles:
+          type: array
+          items: { type: string }
+
+    RideRequestDetails:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        pickupAddress: { type: string }
+        pickupLandmark: { type: string }
+        dropoffAddress: { type: string }
+        riderSuggestedPriceMad: { type: number }
+        calculatedReferencePriceMad: { type: number }
+        status: { type: string, example: "REQUESTED" }
+        expiresAt: { type: string, format: date-time }
+
+    RideConfirmed:
+      type: object
+      properties:
+        rideId: { type: string, format: uuid }
+        status: { type: string, example: "MATCHED" }
+        agreedPriceMad: { type: number, example: 32.00 }
+        driverName: { type: string, example: "ياسين المنصوري" }
+        vehiclePlate: { type: string, example: "12-أ-7890" }
+

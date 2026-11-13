@@ -181,14 +181,6 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                               destinationLat: 33.5992,
                               destinationLon: -7.6114,
                               destinationName: 'الدار البيضاء • كازا بورت',
-                              onLaunch: (uri) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('جارٍ التوجيه الصوتي: $uri'),
-                                    backgroundColor: WasslniColors.emerald800,
-                                  ),
-                                );
-                              },
                             );
                           },
                         ),

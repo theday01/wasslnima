@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Wasslni Voice Navigation Launcher
 /// Triggers Native Deep Links for Turn-by-Turn Voice Navigation:
@@ -20,13 +21,40 @@ class VoiceNavigationHelper {
     return 'https://www.google.com/maps/dir/?api=1&destination=$lat,$lon';
   }
 
+  /// Launch Google Maps directly
+  static Future<bool> launchGoogleMaps(double lat, double lon) async {
+    final nativeUri = Uri.parse(buildGoogleMapsUri(lat, lon));
+    try {
+      if (await canLaunchUrl(nativeUri)) {
+        return await launchUrl(nativeUri, mode: LaunchMode.externalApplication);
+      }
+    } catch (_) {}
+
+    // Fallback to Web URL
+    final webUri = Uri.parse(buildWebNavigationUrl(lat, lon));
+    return await launchUrl(webUri, mode: LaunchMode.externalApplication);
+  }
+
+  /// Launch Waze directly
+  static Future<bool> launchWaze(double lat, double lon) async {
+    final nativeUri = Uri.parse(buildWazeUri(lat, lon));
+    try {
+      if (await canLaunchUrl(nativeUri)) {
+        return await launchUrl(nativeUri, mode: LaunchMode.externalApplication);
+      }
+    } catch (_) {}
+
+    // Fallback to Google Maps if Waze not installed
+    return await launchGoogleMaps(lat, lon);
+  }
+
   /// Show quick modal for driver to pick Waze or Google Maps
   static void showNavigationSelector({
     required BuildContext context,
     required double destinationLat,
     required double destinationLon,
     required String destinationName,
-    required Function(String uri) onLaunch,
+    Function(String uri)? onLaunch,
   }) {
     showModalBottomSheet(
       context: context,
@@ -52,34 +80,40 @@ class VoiceNavigationHelper {
                     ),
                   ),
                 ),
-                const SizedBox(height: 14),
-                const Text(
-                  'اختر تطبيق الملاحة الصوتية',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'IBMPlexSansArabic',
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF0B3D2E),
-                  ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.navigation, color: Color(0xFF0B3D2E), size: 22),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'بدء الملاحة الصوتية المباشرة',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF141F1A),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'الوجهة: $destinationName',
-                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'IBMPlexSansArabic',
                     fontSize: 13,
                     color: Colors.grey.shade700,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
                 // Option 1: Waze
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     Navigator.pop(ctx);
-                    onLaunch(buildWazeUri(destinationLat, destinationLon));
+                    await launchWaze(destinationLat, destinationLon);
+                    if (onLaunch != null) {
+                      onLaunch(buildWazeUri(destinationLat, destinationLon));
+                    }
                   },
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
@@ -92,13 +126,15 @@ class VoiceNavigationHelper {
                     child: Row(
                       children: [
                         Container(
-                          width: 42,
-                          height: 42,
+                          width: 40,
+                          height: 40,
                           decoration: BoxDecoration(
                             color: const Color(0xFF33CCFF),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(Icons.navigation, color: Colors.white, size: 24),
+                          child: const Center(
+                            child: Icon(Icons.alt_route, color: Colors.white, size: 24),
+                          ),
                         ),
                         const SizedBox(width: 14),
                         const Expanded(
@@ -106,18 +142,17 @@ class VoiceNavigationHelper {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'تطبيق Waze (تنبيهات الرادار والزحام)',
+                                'تطبيق Waze (الخيار المفضل للسائقين)',
                                 style: TextStyle(
-                                  fontFamily: 'IBMPlexSansArabic',
+                                  fontWeight: FontWeight.w700,
                                   fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF1E293B),
+                                  color: Color(0xFF0B3D2E),
                                 ),
                               ),
+                              SizedBox(height: 2),
                               Text(
-                                'مفضل لدى أغلب السائقين المغاربة',
+                                'تنبيهات الرادار، كاميرات السرعة، والازدحام اللحظي',
                                 style: TextStyle(
-                                  fontFamily: 'IBMPlexSansArabic',
                                   fontSize: 11,
                                   color: Colors.black54,
                                 ),
@@ -125,19 +160,22 @@ class VoiceNavigationHelper {
                             ],
                           ),
                         ),
-                        const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.black38),
+                        const Icon(Icons.arrow_forward_ios, size: 14, color: Color(0xFF0B3D2E)),
                       ],
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
 
                 // Option 2: Google Maps
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     Navigator.pop(ctx);
-                    onLaunch(buildGoogleMapsUri(destinationLat, destinationLon));
+                    await launchGoogleMaps(destinationLat, destinationLon);
+                    if (onLaunch != null) {
+                      onLaunch(buildGoogleMapsUri(destinationLat, destinationLon));
+                    }
                   },
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
@@ -150,13 +188,15 @@ class VoiceNavigationHelper {
                     child: Row(
                       children: [
                         Container(
-                          width: 42,
-                          height: 42,
+                          width: 40,
+                          height: 40,
                           decoration: BoxDecoration(
                             color: const Color(0xFF4285F4),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(Icons.map, color: Colors.white, size: 24),
+                          child: const Center(
+                            child: Icon(Icons.map, color: Colors.white, size: 24),
+                          ),
                         ),
                         const SizedBox(width: 14),
                         const Expanded(
@@ -164,18 +204,17 @@ class VoiceNavigationHelper {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Google Maps (الملاحة الافتراضية)',
+                                'تطبيق خرائط Google Maps',
                                 style: TextStyle(
-                                  fontFamily: 'IBMPlexSansArabic',
+                                  fontWeight: FontWeight.w700,
                                   fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF1E293B),
+                                  color: Colors.black87,
                                 ),
                               ),
+                              SizedBox(height: 2),
                               Text(
-                                'خرائط جوجل الرسمية مع التوجيه الصوتي بالعربية',
+                                'الملاحة بالصوت المباشر والمسار الأقصر القياسي',
                                 style: TextStyle(
-                                  fontFamily: 'IBMPlexSansArabic',
                                   fontSize: 11,
                                   color: Colors.black54,
                                 ),
@@ -183,12 +222,13 @@ class VoiceNavigationHelper {
                             ],
                           ),
                         ),
-                        const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.black38),
+                        const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+
+                const SizedBox(height: 14),
               ],
             ),
           ),

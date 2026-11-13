@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
 import '../wasslni_theme.dart';
 
 /// Wasslni World-Class Native Vector Map View
@@ -24,6 +25,8 @@ class RealisticVectorMapView extends StatefulWidget {
   final LatLng? destinationPoint;
   final String? destinationTitle;
   final List<Map<String, dynamic>>? liveDrivers;
+  final LatLng? userLocation;
+  final Function(LatLng)? onLocationChanged;
 
   const RealisticVectorMapView({
     Key? key,
@@ -35,6 +38,8 @@ class RealisticVectorMapView extends StatefulWidget {
     this.destinationPoint,
     this.destinationTitle,
     this.liveDrivers,
+    this.userLocation,
+    this.onLocationChanged,
   }) : super(key: key);
 
   @override
@@ -48,6 +53,7 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
 
   // Default Casablanca Center (Maârif / Bd Zerktouni)
   static final LatLng _defaultCenter = LatLng(33.5885, -7.6320);
+  LatLng _userPinLocation = LatLng(33.5885, -7.6320);
   double _currentZoom = 14.5;
 
   @override
@@ -58,6 +64,43 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
       vsync: this,
       duration: const Duration(milliseconds: 1800),
     )..repeat();
+
+    if (widget.userLocation != null) {
+      _userPinLocation = widget.userLocation!;
+    }
+    // Auto-fetch real hardware device GPS coordinates
+    _determineRealDevicePosition();
+  }
+
+  /// Request GPS hardware permission and fetch genuine live coordinates
+  Future<void> _determineRealDevicePosition() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return;
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) return;
+      }
+      if (permission == LocationPermission.deniedForever) return;
+
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 6),
+      );
+
+      final realCoords = LatLng(position.latitude, position.longitude);
+      if (mounted) {
+        setState(() {
+          _userPinLocation = realCoords;
+        });
+        _mapController.move(realCoords, _currentZoom);
+        if (widget.onLocationChanged != null) {
+          widget.onLocationChanged!(realCoords);
+        }
+      }
+    } catch (_) {}
   }
 
   @override
@@ -80,8 +123,9 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
   }
 
   void _recenter() {
-    _currentZoom = 14.5;
-    _mapController.move(_defaultCenter, 14.5);
+    _currentZoom = 15.0;
+    _mapController.move(_userPinLocation, 15.0);
+    _determineRealDevicePosition();
   }
 
   @override
@@ -97,7 +141,7 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
         FlutterMap(
           mapController: _mapController,
           options: MapOptions(
-            initialCenter: _defaultCenter,
+            initialCenter: widget.userLocation ?? _userPinLocation,
             initialZoom: _currentZoom,
             minZoom: 5.0,
             maxZoom: 19.0,
@@ -173,9 +217,9 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
             // D. Interactive Map Markers (User Pin + Optional Real Driver Markers)
             MarkerLayer(
               markers: [
-                // 1. User Pickup Location Marker with Radar Animation
+                // 1. User Pickup Location Marker with Radar Animation (Real GPS Point)
                 Marker(
-                  point: _defaultCenter,
+                  point: widget.userLocation ?? _userPinLocation,
                   width: 140,
                   height: 110,
                   alignment: Alignment.center,

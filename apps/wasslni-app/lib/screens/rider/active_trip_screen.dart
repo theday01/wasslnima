@@ -342,15 +342,9 @@ class _ActiveTripScreenState extends State<ActiveTripScreen> {
                             label: const Text('فتح في Google Maps', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                             onPressed: () {
                               if (_destinationPoint != null) {
-                                final uri = VoiceNavigationHelper.buildGoogleMapsUri(
+                                VoiceNavigationHelper.launchGoogleMaps(
                                   _destinationPoint!.latitude,
                                   _destinationPoint!.longitude,
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('تشغيل الملاحة: $uri'),
-                                    backgroundColor: WasslniColors.emerald800,
-                                  ),
                                 );
                               }
                             },
@@ -369,15 +363,9 @@ class _ActiveTripScreenState extends State<ActiveTripScreen> {
                             label: const Text('فتح في Waze', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                             onPressed: () {
                               if (_destinationPoint != null) {
-                                final uri = VoiceNavigationHelper.buildWazeUri(
+                                VoiceNavigationHelper.launchWaze(
                                   _destinationPoint!.latitude,
                                   _destinationPoint!.longitude,
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('تشغيل الملاحة عبر Waze: $uri'),
-                                    backgroundColor: const Color(0xFF00B0FF),
-                                  ),
                                 );
                               }
                             },

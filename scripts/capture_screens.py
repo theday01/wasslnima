@@ -32,3 +32,4 @@ try:
 finally:
     driver.quit()
 print('ALL SCREENSHOTS CAPTURED SUCCESSFULLY!')
+

@@ -951,8 +951,8 @@
 
     <!-- ==================== SCREEN 4: TRIP IN PROGRESS & SOS ==================== -->
     <div id="screen-active-trip" class="screen">
-      <!-- Simulated Dark Route Map -->
-      <div id="real-map-trip" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0B110E;"></div>
+      <!-- Simulated Route Map -->
+      <div id="real-map-trip" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #F4F6F5;"></div>
 
       <div class="top-floating-bar">
         <div class="sos-capsule" onclick="alert('🚨 تم تفعيل بروتوكول SOS: إرسال موقعك المباشر لشرطة النجدة (19) وجهات الاتصال الموثوقة')">
@@ -1178,10 +1178,10 @@
         attributionControl: true
       }).setView([casaLat, casaLng], 14);
 
-      // OpenFreeMap vector / slippy layer with OpenMapTiles & OpenStreetMap attribution
-      L.tileLayer('https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      // High-Resolution World Street Map (Crisp streets, Moroccan landmarks, zero watermarks)
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 19,
-        attribution: '&copy; <a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> &bull; &copy; <a href="https://openmaptiles.org" target="_blank">OpenMapTiles</a> &bull; &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+        attribution: '&copy; Esri &bull; &copy; OpenStreetMap contributors'
       }).addTo(map);
 
       // High-End Vector Car Marker (No Emojis)
@@ -1228,28 +1228,34 @@
       L.marker([33.5930, -7.6380], { icon: createCarIcon('حمزة', '6 دقائق') }).addTo(map).bindPopup("كابتن حمزة (فيات تيبو) - تقييم 4.88 ⭐");
       L.marker([33.5820, -7.6250], { icon: createCarIcon('عمر', '5 دقائق') }).addTo(map).bindPopup("كابتن عمر (بيجو 208) - تقييم 4.92 ⭐");
 
-      // 2. Active Trip Map
-      const tripMapEl = document.getElementById('real-map-trip');
-      if (tripMapEl) {
-        mapTrip = L.map('real-map-trip', {
-          zoomControl: false,
-          attributionControl: false
-        }).setView([33.5860, -7.6340], 14);
+      // 2. Active Trip Map Setup Helper
+      window.initTripMap = function() {
+        const tripMapEl = document.getElementById('real-map-trip');
+        if (tripMapEl && !mapTrip) {
+          mapTrip = L.map('real-map-trip', {
+            zoomControl: false,
+            attributionControl: false
+          }).setView([33.5875, -7.6310], 14.5);
 
-        L.tileLayer('https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-          maxZoom: 19
-        }).addTo(mapTrip);
+          L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19
+          }).addTo(mapTrip);
 
-        // Driver approaching route line (Emerald Route Polyline)
-        const latlngs = [
-          [33.5895, -7.6300],
-          [33.5888, -7.6310],
-          [33.5885, -7.6320]
-        ];
-        L.polyline(latlngs, { color: '#0B3D2E', weight: 5, opacity: 0.85, dashArray: '6, 8' }).addTo(mapTrip);
-        L.marker([33.5885, -7.6320], { icon: userPinIcon }).addTo(mapTrip);
-        L.marker([33.5895, -7.6300], { icon: createCarIcon('كريم', '2 دقيقة') }).addTo(mapTrip);
-      }
+          // Route polyline with double stroke (gold outline + emerald core)
+          const latlngs = [
+            [33.5895, -7.6300],
+            [33.5888, -7.6310],
+            [33.5885, -7.6320]
+          ];
+          L.polyline(latlngs, { color: '#C9A24B', weight: 8, opacity: 0.9 }).addTo(mapTrip);
+          L.polyline(latlngs, { color: '#0B3D2E', weight: 5, opacity: 0.95 }).addTo(mapTrip);
+
+          L.marker([33.5885, -7.6320], { icon: userPinIcon }).addTo(mapTrip);
+          L.marker([33.5895, -7.6300], { icon: createCarIcon('كريم', '2 دقيقة') }).addTo(mapTrip);
+        } else if (mapTrip) {
+          mapTrip.invalidateSize();
+        }
+      };
     }
 
     window.addEventListener('DOMContentLoaded', initMap);
@@ -1265,10 +1271,13 @@
       if (activeBtn) activeBtn.classList.add('active');
 
       if (screenId === 'screen-rider-home' && map) {
-        setTimeout(() => map.invalidateSize(), 200);
+        setTimeout(() => map.invalidateSize(), 50);
       }
-      if (screenId === 'screen-trip' && mapTrip) {
-        setTimeout(() => mapTrip.invalidateSize(), 200);
+      if (screenId === 'screen-active-trip') {
+        setTimeout(() => {
+          if (window.initTripMap) window.initTripMap();
+          if (mapTrip) mapTrip.invalidateSize();
+        }, 100);
       }
     }
 

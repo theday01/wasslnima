@@ -12,6 +12,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
   flutter_ui:
     path: ../../packages/flutter-ui
 

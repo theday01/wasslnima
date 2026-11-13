@@ -18,7 +18,7 @@ try:
     print('Home map captured.')
 
     # 2. Capture Active Trip Map
-    driver.execute_script("showScreen('screen-trip');")
+    driver.execute_script("showScreen('screen-active-trip');")
     time.sleep(3)
     driver.save_screenshot('C:/Users/Hamza/.gemini/antigravity/brain/2d755162-2af2-4672-a516-1d36c26830c5/map_active_trip.png')
     print('Active trip map captured.')

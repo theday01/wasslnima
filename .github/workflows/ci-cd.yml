@@ -58,6 +58,8 @@ jobs:
         working-directory: apps/rider-app
         run: |
           flutter create . --platforms=android --org=ma.wasslni --project-name=rider_app
+          # Ensure compatible modern Kotlin version in android/settings.gradle
+          sed -i 's/id "org.jetbrains.kotlin.android" version "[^"]*"/id "org.jetbrains.kotlin.android" version "1.9.24"/' android/settings.gradle || true
           cp -r ../../assets/icons/rider/* android/app/src/main/res/
           flutter pub get
           flutter build apk --release
@@ -73,6 +75,8 @@ jobs:
         working-directory: apps/driver-app
         run: |
           flutter create . --platforms=android --org=ma.wasslni --project-name=driver_app
+          # Ensure compatible modern Kotlin version in android/settings.gradle
+          sed -i 's/id "org.jetbrains.kotlin.android" version "[^"]*"/id "org.jetbrains.kotlin.android" version "1.9.24"/' android/settings.gradle || true
           cp -r ../../assets/icons/driver/* android/app/src/main/res/
           flutter pub get
           flutter build apk --release

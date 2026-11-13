@@ -293,6 +293,8 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
                                   driverName: bid['driverName'],
                                   vehicleInfo: bid['vehicle'],
                                   agreedPriceMad: bid['price'],
+                                  pickupLocation: widget.pickupLocation,
+                                  destinationLocation: widget.destinationLocation,
                                 ),
                               ),
                             );

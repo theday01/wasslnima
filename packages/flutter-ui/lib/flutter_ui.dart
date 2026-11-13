@@ -17,3 +17,6 @@ export 'screens/payment_methods_screen.dart';
 export 'screens/support_center_screen.dart';
 export 'screens/safety_center_screen.dart';
 export 'screens/settings_screen.dart';
+
+// Services
+export 'services/wasslni_routing_service.dart';

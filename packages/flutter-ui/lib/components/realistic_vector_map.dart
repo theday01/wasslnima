@@ -21,6 +21,8 @@ class RealisticVectorMapView extends StatefulWidget {
   final bool isNightMode;
   final VoidCallback? onCenterTap;
   final List<LatLng>? routePoints;
+  final LatLng? destinationPoint;
+  final String? destinationTitle;
   final List<Map<String, dynamic>>? liveDrivers;
 
   const RealisticVectorMapView({
@@ -30,6 +32,8 @@ class RealisticVectorMapView extends StatefulWidget {
     this.isNightMode = false,
     this.onCenterTap,
     this.routePoints,
+    this.destinationPoint,
+    this.destinationTitle,
     this.liveDrivers,
   }) : super(key: key);
 
@@ -178,7 +182,17 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
                   child: _buildPickupMarker(),
                 ),
 
-                // 2. Real Driver Markers (Only if provided dynamically from live WebSocket/API)
+                // 2. Real Destination Location Marker (When route is active)
+                if (widget.destinationPoint != null)
+                  Marker(
+                    point: widget.destinationPoint!,
+                    width: 140,
+                    height: 100,
+                    alignment: Alignment.center,
+                    child: _buildDestinationMarker(),
+                  ),
+
+                // 3. Real Driver Markers (Only if provided dynamically from live WebSocket/API)
                 if (widget.liveDrivers != null)
                   ...widget.liveDrivers!.map((d) {
                     return Marker(
@@ -243,6 +257,44 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
               ],
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  /// Destination Location Marker Widget
+  Widget _buildDestinationMarker() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: WasslniColors.gold500,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: WasslniColors.emerald800, width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Text(
+            widget.destinationTitle ?? 'الوجهة المقصودة',
+            style: const TextStyle(
+              color: WasslniColors.emerald900,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        const SizedBox(height: 2),
+        const Icon(
+          Icons.flag_rounded,
+          color: WasslniColors.gold600,
+          size: 34,
         ),
       ],
     );

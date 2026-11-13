@@ -293,7 +293,7 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
         const SizedBox(height: 2),
         const Icon(
           Icons.flag_rounded,
-          color: WasslniColors.gold600,
+          color: WasslniColors.gold500,
           size: 34,
         ),
       ],

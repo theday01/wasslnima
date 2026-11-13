@@ -342,10 +342,15 @@ class _ActiveTripScreenState extends State<ActiveTripScreen> {
                             label: const Text('فتح في Google Maps', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                             onPressed: () {
                               if (_destinationPoint != null) {
-                                VoiceNavigationHelper.openGoogleMaps(
-                                  destLat: _destinationPoint!.latitude,
-                                  destLon: _destinationPoint!.longitude,
-                                  destinationTitle: widget.destinationLocation,
+                                final uri = VoiceNavigationHelper.buildGoogleMapsUri(
+                                  _destinationPoint!.latitude,
+                                  _destinationPoint!.longitude,
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('تشغيل الملاحة: $uri'),
+                                    backgroundColor: WasslniColors.emerald800,
+                                  ),
                                 );
                               }
                             },
@@ -364,9 +369,15 @@ class _ActiveTripScreenState extends State<ActiveTripScreen> {
                             label: const Text('فتح في Waze', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                             onPressed: () {
                               if (_destinationPoint != null) {
-                                VoiceNavigationHelper.openWaze(
-                                  destLat: _destinationPoint!.latitude,
-                                  destLon: _destinationPoint!.longitude,
+                                final uri = VoiceNavigationHelper.buildWazeUri(
+                                  _destinationPoint!.latitude,
+                                  _destinationPoint!.longitude,
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('تشغيل الملاحة عبر Waze: $uri'),
+                                    backgroundColor: const Color(0xFF00B0FF),
+                                  ),
                                 );
                               }
                             },

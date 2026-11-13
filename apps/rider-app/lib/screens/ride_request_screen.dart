@@ -57,13 +57,14 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: WasslniColors.darkCanvas,
+      backgroundColor: WasslniColors.lightCanvas,
       appBar: AppBar(
-        backgroundColor: WasslniColors.darkSurface,
-        elevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: WasslniColors.lightTextPrimary,
+        elevation: 0.5,
         title: const Text(
-          'طلب رحلة جديدة',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            'طلب رحلة جديدة',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
         ),
       ),
       body: SafeArea(
@@ -76,9 +77,16 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: WasslniColors.darkSurface,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: WasslniColors.darkBorder),
+                  border: Border.all(color: WasslniColors.lightBorder, width: 1.5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.04),
+                      blurRadius: 12,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
                 child: Column(
                   children: [
@@ -91,14 +99,14 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                           child: TextField(
                             controller: _pickupController,
                             style: const TextStyle(
-                              color: WasslniColors.textPrimary,
+                              color: WasslniColors.lightTextPrimary,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
                             decoration: const InputDecoration(
                               hintText: 'من أين تنطلق؟ (مثال: محطة القطار، المعاريف...)',
                               hintStyle: TextStyle(
-                                color: WasslniColors.textTertiary,
+                                color: WasslniColors.lightTextTertiary,
                                 fontSize: 13,
                               ),
                               border: InputBorder.none,
@@ -109,7 +117,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                         ),
                       ],
                     ),
-                    const Divider(color: WasslniColors.darkBorder, height: 20),
+                    const Divider(color: WasslniColors.lightBorder, height: 20),
                     // Destination input
                     Row(
                       children: [
@@ -119,14 +127,14 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                           child: TextField(
                             controller: _destController,
                             style: const TextStyle(
-                              color: WasslniColors.textPrimary,
+                              color: WasslniColors.lightTextPrimary,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
                             decoration: const InputDecoration(
                               hintText: 'إلى أين تريد الذهاب؟ (مثال: موروكو مول، كازابورت...)',
                               hintStyle: TextStyle(
-                                color: WasslniColors.textTertiary,
+                                color: WasslniColors.lightTextTertiary,
                                 fontSize: 13,
                               ),
                               border: InputBorder.none,
@@ -137,23 +145,24 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                         ),
                       ],
                     ),
-                    const Divider(color: WasslniColors.darkBorder, height: 20),
+                    const Divider(color: WasslniColors.lightBorder, height: 20),
                     // Optional Landmark
                     Row(
                       children: [
-                        const Icon(Icons.bookmark_border, color: WasslniColors.gold500, size: 16),
+                        const Icon(Icons.bookmark_border, color: WasslniColors.emerald800, size: 16),
                         const SizedBox(width: 12),
                         Expanded(
                           child: TextField(
                             controller: _landmarkController,
                             style: const TextStyle(
-                              color: WasslniColors.gold500,
+                              color: WasslniColors.emerald800,
                               fontSize: 13,
+                              fontWeight: FontWeight.w600,
                             ),
                             decoration: const InputDecoration(
                               hintText: 'معلم قريب لتسهيل اللقاء (اختياري: حدا الصيدلية، قبالة بيم...)',
                               hintStyle: TextStyle(
-                                color: WasslniColors.textTertiary,
+                                color: WasslniColors.lightTextTertiary,
                                 fontSize: 12,
                               ),
                               border: InputBorder.none,
@@ -173,11 +182,11 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
               // Categories Row with Professional Vector Icons
               Row(
                 children: [
-                  _buildCategoryCard('ECO', 'اقتصادي', '25 MAD', Icons.directions_car),
+                  _buildCategoryCard('ECO', 'اقتصادي', '25 MAD', Icons.directions_car_rounded),
                   const SizedBox(width: 8),
-                  _buildCategoryCard('CONFORT', 'مريح VIP', '35 MAD', Icons.airline_seat_recline_extra),
+                  _buildCategoryCard('CONFORT', 'مريح VIP', '35 MAD', Icons.airline_seat_recline_extra_rounded),
                   const SizedBox(width: 8),
-                  _buildCategoryCard('WOMEN', 'سائقة فقط', '25 MAD', Icons.female),
+                  _buildCategoryCard('WOMEN', 'سائقة فقط', '25 MAD', Icons.female_rounded),
                 ],
               ),
 
@@ -198,27 +207,35 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: WasslniColors.darkSurface,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: WasslniColors.darkBorder),
+                  border: Border.all(color: WasslniColors.lightBorder, width: 1.5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.03),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: const Row(
                   children: [
-                    Icon(Icons.payments_outlined, color: WasslniColors.gold500, size: 22),
+                    Icon(Icons.payments_outlined, color: WasslniColors.emerald800, size: 22),
                     SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         'طريقة الدفع: نقداً (كاش مباشرة للسائق)',
                         style: TextStyle(
-                          color: WasslniColors.textPrimary,
+                          color: WasslniColors.lightTextPrimary,
                           fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     Text(
                       'تغيير',
                       style: TextStyle(
-                        color: WasslniColors.gold500,
+                        color: WasslniColors.gold900,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
@@ -260,25 +277,34 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
           decoration: BoxDecoration(
-            color: isSelected ? WasslniColors.emerald800.withOpacity(0.4) : WasslniColors.darkSurface,
+            color: isSelected ? WasslniColors.emerald50 : Colors.white,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: isSelected ? WasslniColors.gold500 : WasslniColors.darkBorder,
-              width: isSelected ? 1.5 : 1.0,
+              color: isSelected ? WasslniColors.emerald800 : WasslniColors.lightBorder,
+              width: isSelected ? 2.0 : 1.0,
             ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: WasslniColors.emerald800.withOpacity(0.12),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : null,
           ),
           child: Column(
             children: [
               Icon(
                 icon,
-                color: isSelected ? WasslniColors.gold500 : WasslniColors.textSecondary,
+                color: isSelected ? WasslniColors.emerald800 : WasslniColors.lightTextSecondary,
                 size: 24,
               ),
               const SizedBox(height: 6),
               Text(
                 title,
                 style: TextStyle(
-                  color: isSelected ? Colors.white : WasslniColors.textSecondary,
+                  color: isSelected ? WasslniColors.emerald800 : WasslniColors.lightTextSecondary,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -287,9 +313,9 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
               Text(
                 fare,
                 style: TextStyle(
-                  color: isSelected ? WasslniColors.gold500 : WasslniColors.textTertiary,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
+                  color: isSelected ? WasslniColors.gold900 : WasslniColors.lightTextTertiary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ],

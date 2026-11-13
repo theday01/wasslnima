@@ -9,12 +9,12 @@ class DriverIncomingRequestModal extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: WasslniColors.darkSurface,
+        color: Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border.all(color: WasslniColors.gold500, width: 1.5),
+        border: Border.all(color: WasslniColors.emerald800, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.8),
+            color: Colors.black.withOpacity(0.18),
             blurRadius: 30,
             offset: const Offset(0, -6),
           ),
@@ -31,14 +31,14 @@ class DriverIncomingRequestModal extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: WasslniColors.emerald800.withOpacity(0.3),
+                  color: WasslniColors.emerald50,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: WasslniColors.emerald400),
+                  border: Border.all(color: WasslniColors.emerald800.withOpacity(0.3)),
                 ),
                 child: const Text(
                   'طلب جديد مباشر',
                   style: TextStyle(
-                    color: WasslniColors.emerald400,
+                    color: WasslniColors.emerald800,
                     fontWeight: FontWeight.w700,
                     fontSize: 12,
                   ),
@@ -65,10 +65,11 @@ class DriverIncomingRequestModal extends StatelessWidget {
 
           // Route Info
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: WasslniColors.darkSurfaceRaised,
+              color: WasslniColors.lightSurfaceRaised,
               borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: WasslniColors.lightBorder),
             ),
             child: const Column(
               children: [
@@ -80,7 +81,7 @@ class DriverIncomingRequestModal extends StatelessWidget {
                       child: Text(
                         'عين السبع (حدا مرجان) • 1.1 كم منك (4 دقائق)',
                         style: TextStyle(
-                          color: WasslniColors.textPrimary,
+                          color: WasslniColors.lightTextPrimary,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),
@@ -88,7 +89,7 @@ class DriverIncomingRequestModal extends StatelessWidget {
                     ),
                   ],
                 ),
-                Divider(color: WasslniColors.darkBorder, height: 16),
+                Divider(color: WasslniColors.lightBorder, height: 18),
                 Row(
                   children: [
                     Icon(Icons.location_on, color: Color(0xFFEF4444), size: 14),
@@ -97,7 +98,7 @@ class DriverIncomingRequestModal extends StatelessWidget {
                       child: Text(
                         'سيدي بليوط (شارع الجيش الملكي)',
                         style: TextStyle(
-                          color: WasslniColors.textPrimary,
+                          color: WasslniColors.lightTextPrimary,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),
@@ -117,7 +118,7 @@ class DriverIncomingRequestModal extends StatelessWidget {
               children: [
                 const Text(
                   'السعر المقترح من الراكب:',
-                  style: TextStyle(color: WasslniColors.textSecondary, fontSize: 13),
+                  style: TextStyle(color: WasslniColors.lightTextSecondary, fontSize: 13),
                 ),
                 const SizedBox(height: 4),
                 RichText(
@@ -126,9 +127,9 @@ class DriverIncomingRequestModal extends StatelessWidget {
                       TextSpan(
                         text: '35 ',
                         style: TextStyle(
-                          color: WasslniColors.gold500,
-                          fontSize: 36,
-                          fontWeight: FontWeight.w800,
+                          color: WasslniColors.emerald800,
+                          fontSize: 38,
+                          fontWeight: FontWeight.w900,
                           fontFamily: 'IBMPlexSansArabic',
                         ),
                       ),
@@ -137,7 +138,7 @@ class DriverIncomingRequestModal extends StatelessWidget {
                         style: TextStyle(
                           color: WasslniColors.gold500,
                           fontSize: 18,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w800,
                           fontFamily: 'IBMPlexSansArabic',
                         ),
                       ),
@@ -152,7 +153,7 @@ class DriverIncomingRequestModal extends StatelessWidget {
 
           // Actions: Accept exact or Negotiate with counter offers
           WasslniButton(
-            text: 'قبول بـ 35 MAD فوراً ✅',
+            text: 'قبول بـ 35 MAD فوراً',
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
@@ -179,7 +180,7 @@ class DriverIncomingRequestModal extends StatelessWidget {
               onPressed: () => Navigator.pop(context),
               child: const Text(
                 'تجاهل الطلب',
-                style: TextStyle(color: WasslniColors.textTertiary),
+                style: TextStyle(color: WasslniColors.lightTextTertiary),
               ),
             ),
           ),
@@ -192,8 +193,9 @@ class DriverIncomingRequestModal extends StatelessWidget {
     return Expanded(
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          foregroundColor: WasslniColors.textPrimary,
-          side: const BorderSide(color: WasslniColors.darkBorder),
+          foregroundColor: WasslniColors.emerald800,
+          side: const BorderSide(color: WasslniColors.lightBorder, width: 1.5),
+          backgroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 10),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -210,4 +212,3 @@ class DriverIncomingRequestModal extends StatelessWidget {
     );
   }
 }
-

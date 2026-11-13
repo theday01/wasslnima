@@ -20,18 +20,25 @@ class PriceNegotiationStepper extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: WasslniColors.darkSurface,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: WasslniColors.darkBorder),
+        border: Border.all(color: WasslniColors.lightBorder, width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         children: [
           const Text(
             'اقترح سعرك للرحلة (درهم مغربي)',
             style: TextStyle(
-              color: WasslniColors.textSecondary,
+              color: WasslniColors.lightTextSecondary,
               fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 14),
@@ -56,9 +63,9 @@ class PriceNegotiationStepper extends StatelessWidget {
                   Text(
                     '$currentPriceMad',
                     style: const TextStyle(
-                      color: WasslniColors.textPrimary,
-                      fontSize: 38,
-                      fontWeight: FontWeight.w800,
+                      color: WasslniColors.emerald800,
+                      fontSize: 40,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -67,7 +74,7 @@ class PriceNegotiationStepper extends StatelessWidget {
                     style: TextStyle(
                       color: WasslniColors.gold500,
                       fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ],
@@ -83,11 +90,19 @@ class PriceNegotiationStepper extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Text(
-            'السعر الموصى به: $referencePriceMad MAD',
-            style: const TextStyle(
-              color: WasslniColors.textTertiary,
-              fontSize: 12,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: WasslniColors.lightSurfaceRaised,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              'السعر الموصى به: $referencePriceMad MAD',
+              style: const TextStyle(
+                color: WasslniColors.lightTextTertiary,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
@@ -106,13 +121,12 @@ class PriceNegotiationStepper extends StatelessWidget {
         width: 48,
         height: 48,
         decoration: BoxDecoration(
-          color: WasslniColors.darkSurfaceRaised,
+          color: WasslniColors.emerald50,
           shape: BoxShape.circle,
-          border: Border.all(color: WasslniColors.darkBorder),
+          border: Border.all(color: WasslniColors.emerald800.withOpacity(0.3)),
         ),
-        child: Icon(icon, color: WasslniColors.gold500, size: 22),
+        child: Icon(icon, color: WasslniColors.emerald800, size: 22),
       ),
     );
   }
 }
-

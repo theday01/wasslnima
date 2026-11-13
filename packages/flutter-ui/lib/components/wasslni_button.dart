@@ -19,22 +19,33 @@ class WasslniButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final bgColor = isSecondary
+        ? (isDark ? WasslniColors.darkSurfaceRaised : WasslniColors.lightSurfaceRaised)
+        : WasslniColors.emerald800;
+
+    final fgColor = isSecondary
+        ? (isDark ? WasslniColors.darkTextPrimary : WasslniColors.lightTextPrimary)
+        : Colors.white;
+
+    final borderColor = isSecondary
+        ? (isDark ? WasslniColors.darkBorder : WasslniColors.lightBorder)
+        : WasslniColors.gold500.withOpacity(0.5);
+
     return SizedBox(
       height: 52,
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSecondary
-              ? WasslniColors.darkSurfaceRaised
-              : WasslniColors.emerald800,
-          foregroundColor: WasslniColors.textPrimary,
-          elevation: isSecondary ? 0 : 4,
+          backgroundColor: bgColor,
+          foregroundColor: fgColor,
+          elevation: isSecondary ? 0 : 3,
+          shadowColor: WasslniColors.emerald800.withOpacity(0.35),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(
-              color: isSecondary
-                  ? WasslniColors.darkBorder
-                  : WasslniColors.gold500.withOpacity(0.4),
+              color: borderColor,
               width: 1,
             ),
           ),
@@ -58,7 +69,8 @@ class WasslniButton extends StatelessWidget {
                   ],
                   Text(
                     text,
-                    style: const TextStyle(
+                    style: TextStyle(
+                      color: fgColor,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.3,
@@ -70,4 +82,3 @@ class WasslniButton extends StatelessWidget {
     );
   }
 }
-

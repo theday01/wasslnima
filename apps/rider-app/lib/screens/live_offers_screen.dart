@@ -25,14 +25,13 @@ class LiveOffersScreen extends StatefulWidget {
 class _LiveOffersScreenState extends State<LiveOffersScreen> {
   late int _currentPrice;
   final List<Map<String, dynamic>> _bids = [];
-  bool _isSearching = true;
 
   @override
   void initState() {
     super.initState();
     _currentPrice = widget.suggestedPriceMad;
 
-    // Simulate real nearby drivers discovering the live request after 2 seconds
+    // Simulate real nearby drivers discovering the live broadcast
     Future.delayed(const Duration(milliseconds: 2200), () {
       if (mounted) {
         setState(() {
@@ -82,10 +81,11 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: WasslniColors.darkCanvas,
+      backgroundColor: WasslniColors.lightCanvas,
       appBar: AppBar(
-        backgroundColor: WasslniColors.darkSurface,
-        elevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: WasslniColors.lightTextPrimary,
+        elevation: 0.5,
         title: const Text(
           'رادار العروض الحية',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
@@ -108,23 +108,30 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: WasslniColors.darkSurface,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: WasslniColors.darkBorder),
+                  border: Border.all(color: WasslniColors.lightBorder, width: 1.5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.04),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.navigation, color: WasslniColors.emerald400, size: 16),
+                        const Icon(Icons.navigation_rounded, color: WasslniColors.emerald800, size: 16),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             '${widget.pickupLocation} ➔ ${widget.destinationLocation}',
                             style: const TextStyle(
-                              color: WasslniColors.textPrimary,
-                              fontSize: 13,
+                              color: WasslniColors.lightTextPrimary,
+                              fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
                             maxLines: 1,
@@ -138,8 +145,9 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
                       Text(
                         'معلم: ${widget.landmarkNote}',
                         style: const TextStyle(
-                          color: WasslniColors.gold500,
-                          fontSize: 11,
+                          color: WasslniColors.gold900,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -154,9 +162,16 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: WasslniColors.emerald800.withOpacity(0.18),
+                  color: WasslniColors.emerald50,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: WasslniColors.emerald500.withOpacity(0.4)),
+                  border: Border.all(color: WasslniColors.emerald800.withOpacity(0.2)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: WasslniColors.emerald800.withOpacity(0.06),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Row(
                   children: [
@@ -164,8 +179,8 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
                       width: 22,
                       height: 22,
                       child: CircularProgressIndicator(
-                        strokeWidth: 2.2,
-                        valueColor: AlwaysStoppedAnimation<Color>(WasslniColors.emerald400),
+                        strokeWidth: 2.4,
+                        valueColor: AlwaysStoppedAnimation<Color>(WasslniColors.emerald800),
                       ),
                     ),
                     const SizedBox(width: 14),
@@ -176,7 +191,7 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
                           Text(
                             'سعرك المعروض: $_currentPrice MAD',
                             style: const TextStyle(
-                              color: WasslniColors.textPrimary,
+                              color: WasslniColors.emerald800,
                               fontWeight: FontWeight.w800,
                               fontSize: 15,
                             ),
@@ -185,8 +200,9 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
                           const Text(
                             'يتم بث طلبك الآن للكباتن القريبين منك...',
                             style: TextStyle(
-                              color: WasslniColors.emerald400,
+                              color: WasslniColors.emerald700,
                               fontSize: 12,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
@@ -197,6 +213,7 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
                         backgroundColor: WasslniColors.gold500,
                         foregroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        elevation: 1,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -218,9 +235,9 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
                   ? 'جاري فحص العروض...'
                   : 'عروض الكباتن المتاحة (${_bids.length}):',
                 style: const TextStyle(
-                  color: WasslniColors.textSecondary,
+                  color: WasslniColors.lightTextSecondary,
                   fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 10),
@@ -233,23 +250,24 @@ class _LiveOffersScreenState extends State<LiveOffersScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.radar,
+                            Icons.radar_rounded,
                             size: 64,
-                            color: WasslniColors.emerald400.withOpacity(0.4),
+                            color: WasslniColors.emerald800.withOpacity(0.35),
                           ),
                           const SizedBox(height: 14),
                           const Text(
                             'في انتظار رد السائقين القريبين...',
                             style: TextStyle(
-                              color: WasslniColors.textSecondary,
-                              fontSize: 14,
+                              color: WasslniColors.lightTextPrimary,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           const SizedBox(height: 6),
                           const Text(
                             'يمكنك رفع سعرك قليلاً لتسريع قبول الرحلة',
                             style: TextStyle(
-                              color: WasslniColors.textTertiary,
+                              color: WasslniColors.lightTextTertiary,
                               fontSize: 12,
                             ),
                           ),

@@ -189,3 +189,4 @@ class PaymentMethodsScreen extends StatelessWidget {
     );
   }
 }
+

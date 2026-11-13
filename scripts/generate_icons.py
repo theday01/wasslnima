@@ -111,3 +111,4 @@ if __name__ == '__main__':
     print("\nGenerating Driver App Icons...")
     generate_app_icon(driver_res, is_driver=True)
     print("\nDone!")
+

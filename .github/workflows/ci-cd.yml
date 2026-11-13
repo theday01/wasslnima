@@ -7,6 +7,9 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   # Build Android APKs in Cloud
   build-mobile-apks:
@@ -37,12 +40,13 @@ jobs:
           cp -r ../../assets/icons/rider/* android/app/src/main/res/
           flutter pub get
           flutter build apk --release
+          cp build/app/outputs/flutter-apk/app-release.apk ../../wasslni-rider.apk
 
       - name: Upload Rider App APK
         uses: actions/upload-artifact@v4
         with:
           name: wasslni-rider-app-release-apk
-          path: apps/rider-app/build/app/outputs/flutter-apk/app-release.apk
+          path: wasslni-rider.apk
 
       - name: Scaffolding & Build Driver App APK
         working-directory: apps/driver-app
@@ -52,9 +56,33 @@ jobs:
           cp -r ../../assets/icons/driver/* android/app/src/main/res/
           flutter pub get
           flutter build apk --release
+          cp build/app/outputs/flutter-apk/app-release.apk ../../wasslni-driver.apk
 
       - name: Upload Driver App APK
         uses: actions/upload-artifact@v4
         with:
           name: wasslni-driver-app-release-apk
-          path: apps/driver-app/build/app/outputs/flutter-apk/app-release.apk
+          path: wasslni-driver.apk
+
+      - name: Publish to GitHub Release v1.0.0
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0
+          name: "وصّلني - النسخة الرسمية للموبايل v1.0.0"
+          body: |
+            ### 🚗 تطبيق وصّلني (Wasslni Morocco) - الإصدار الرسمي المعتمد 🇲🇦
+            
+            تم بناء هذه النسخة بأعلى معايير الجودة العالمية لتطبيقات النقل الذكي:
+            - **الوضع النهاري (Day Mode)**: مفعل كوضع افتراضي رسمي بتصميم مغربي فاخر (أخضر زمردي وذهبي ملكي على خلفيات ناصعة ومريحة للعين).
+            - **تكامل الخرائط الحية (OpenStreetMap Real API)**: عرض تفاعلي مباشر لشوارع وأحياء الدار البيضاء الحقيقية مع نظام الرادار وبث الطلبات.
+            - **أيقونات تطبيقات رسمية مخصصة (Custom Launcher Icons)**: تظهر بجودة عالية بعد التثبيت على جميع هواتف أندرويد.
+            - **صفحات مخصصة لجميع بنود القائمة الجانبية**: (سجل الرحلات، طرق الدفع المغربية كاش وCMI ووفاكاش، مركز الأمان المتوافق مع CNDP، الدعم والمساعدة 24/7 مع واتساب وSOS 19، والإعدادات متعددة اللغات).
+            - **نظافة البيانات 100%**: تم حذف أية بيانات تجريبية لتبدأ الرحلات والمحافظ بسجل نقي تماماً للمستخدم الحقيقي.
+            
+            #### 📥 روابط التحميل المباشرة:
+            - **تطبيق الراكب**: `wasslni-rider.apk`
+            - **تطبيق السائق (الكابتن)**: `wasslni-driver.apk`
+          files: |
+            wasslni-rider.apk
+            wasslni-driver.apk

@@ -9,6 +9,7 @@ import { Pool } from 'pg';
 import { DATABASE_POOL } from '../../database/database.module';
 import { PricingService } from '../pricing/pricing.service';
 import { EventsGateway } from '../events/events.gateway';
+import { MapsService } from '../maps/maps.service';
 import { CreateRideRequestDto, SubmitDriverOfferDto } from './rides.dto';
 
 @Injectable()
@@ -19,22 +20,36 @@ export class RidesService {
     @Inject(DATABASE_POOL) private readonly db: Pool,
     private readonly pricingService: PricingService,
     private readonly eventsGateway: EventsGateway,
+    private readonly mapsService: MapsService,
   ) {}
 
   /**
    * Rider creates a new ride request with negotiated suggested price
    */
   async createRideRequest(riderId: string, dto: CreateRideRequestDto) {
-    // 1. Calculate trip distance via Haversine
-    const distanceKm = this.pricingService.calculateHaversineDistance(
-      dto.pickupLat,
-      dto.pickupLng,
-      dto.dropoffLat,
-      dto.dropoffLng,
-    );
+    // 1. Calculate trip distance and duration via backend MapProvider once
+    let distanceKm = 0;
+    let durationMinutes = 0;
+    let routeGeoJson: any = null;
 
-    // Approximate urban driving time in Moroccan cities (avg 25 km/h + 3 mins traffic)
-    const durationMinutes = Math.max(5, Math.round((distanceKm / 25) * 60 + 3));
+    try {
+      const routeResult = await this.mapsService.route(
+        { lat: dto.pickupLat, lon: dto.pickupLng },
+        { lat: dto.dropoffLat, lon: dto.dropoffLng },
+        'driving-car',
+      );
+      distanceKm = routeResult.distanceKm;
+      durationMinutes = routeResult.durationMinutes;
+      routeGeoJson = routeResult.geometryGeoJson;
+    } catch {
+      distanceKm = this.pricingService.calculateHaversineDistance(
+        dto.pickupLat,
+        dto.pickupLng,
+        dto.dropoffLat,
+        dto.dropoffLng,
+      );
+      durationMinutes = Math.max(5, Math.round((distanceKm / 25) * 60 + 3));
+    }
 
     // 2. Fetch or compute reference price
     const estimate = this.pricingService.calculateTripEstimate({

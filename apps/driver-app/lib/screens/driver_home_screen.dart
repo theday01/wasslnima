@@ -131,26 +131,63 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   ),
                   const SizedBox(height: 18),
 
-                  // Simulated Incoming Request Test Button
-                  OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: WasslniColors.emerald800,
-                      side: const BorderSide(color: WasslniColors.emerald800),
-                      minimumSize: const Size(double.infinity, 44),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  // Navigation & Simulated Request Row
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: WasslniColors.emerald800,
+                            side: const BorderSide(color: WasslniColors.emerald800),
+                            minimumSize: const Size(double.infinity, 44),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const Icon(Icons.bolt, size: 18),
+                          label: const Text('محاكاة طلب جديد'),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (_) => const DriverIncomingRequestModal(),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    icon: const Icon(Icons.bolt, size: 18),
-                    label: const Text('محاكاة وصول طلب جديد'),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (_) => const DriverIncomingRequestModal(),
-                      );
-                    },
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF0B3D2E),
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(double.infinity, 44),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const Icon(Icons.navigation, size: 18, color: WasslniColors.gold500),
+                          label: const Text('الملاحة الصوتية'),
+                          onPressed: () {
+                            VoiceNavigationHelper.showNavigationSelector(
+                              context: context,
+                              destinationLat: 33.5992,
+                              destinationLon: -7.6114,
+                              destinationName: 'الدار البيضاء • كازا بورت',
+                              onLaunch: (uri) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('جارٍ التوجيه الصوتي: $uri'),
+                                    backgroundColor: WasslniColors.emerald800,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 12),
 

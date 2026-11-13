@@ -10,6 +10,7 @@ import { WalletsModule } from './modules/wallets/wallets.module';
 import { ReferralsModule } from './modules/referrals/referrals.module';
 import { EventsModule } from './modules/events/events.module';
 import { SafetyModule } from './modules/safety/safety.module';
+import { MapsModule } from './modules/maps/maps.module';
 import { DatabaseModule } from './database/database.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { DatabaseModule } from './database/database.module';
       envFilePath: '.env',
     }),
     DatabaseModule,
+    MapsModule,
     AuthModule,
     UsersModule,
     RidersModule,

@@ -367,28 +367,34 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
                 ),
               ),
 
-              // 8. OpenStreetMap Professional Attribution Banner
+              // 8. OpenFreeMap & OpenMapTiles Official Legal Attribution Banner
               Positioned(
                 bottom: 215,
                 left: 16,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.85),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: Colors.black12),
+                    color: Colors.white.withOpacity(0.92),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: WasslniColors.emerald800.withOpacity(0.3)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.06),
+                        blurRadius: 4,
+                      ),
+                    ],
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.map_outlined, size: 11, color: Colors.black54),
-                      SizedBox(width: 4),
+                      Icon(Icons.layers_outlined, size: 12, color: WasslniColors.emerald800),
+                      SizedBox(width: 5),
                       Text(
-                        '© OpenStreetMap • الدار البيضاء الحية',
+                        '© OpenFreeMap • © OpenMapTiles • © OpenStreetMap',
                         style: TextStyle(
                           fontSize: 9.5,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
+                          fontWeight: FontWeight.w700,
+                          color: WasslniColors.emerald800,
                         ),
                       ),
                     ],

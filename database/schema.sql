@@ -608,6 +608,23 @@ CREATE TABLE settings (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
+-- Table: places (Pre-indexed landmarks for instant Moroccan POI resolution: Airports, Stations, Malls, Universities, Hospitals)
+CREATE TABLE places (
+    id VARCHAR(64) PRIMARY KEY,
+    name_ar TEXT NOT NULL,
+    name_fr TEXT NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    address_ar TEXT,
+    address_fr TEXT,
+    aliases TEXT[] DEFAULT '{}',
+    location GEOGRAPHY(Point, 4326) NOT NULL,
+    popularity_score INTEGER DEFAULT 50,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 -- 11. INDEXES
 
 -- PostGIS Spatial Indexes (GIST)
@@ -617,6 +634,9 @@ CREATE INDEX idx_ride_requests_dropoff ON ride_requests USING GIST (dropoff_loca
 CREATE INDEX idx_cities_boundary ON cities USING GIST (boundary);
 CREATE INDEX idx_zones_boundary ON zones USING GIST (boundary);
 CREATE INDEX idx_airport_hubs_location ON airport_station_pricing USING GIST (hub_location);
+CREATE INDEX idx_places_location ON places USING GIST (location);
+CREATE INDEX idx_places_category ON places (category);
+CREATE INDEX idx_places_city ON places (city);
 
 -- B-Tree Performance Indexes
 CREATE INDEX idx_users_phone ON users (phone_number);
@@ -651,4 +671,5 @@ CREATE TRIGGER trg_ride_requests_updated_at BEFORE UPDATE ON ride_requests FOR E
 CREATE TRIGGER trg_wallets_updated_at BEFORE UPDATE ON wallets FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER trg_payments_updated_at BEFORE UPDATE ON payments FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER trg_complaints_updated_at BEFORE UPDATE ON complaints FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER trg_places_updated_at BEFORE UPDATE ON places FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 

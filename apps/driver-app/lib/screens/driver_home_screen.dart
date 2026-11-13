@@ -19,7 +19,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: WasslniColors.darkCanvas,
+      backgroundColor: WasslniColors.lightCanvas,
       drawer: WasslniSideDrawer(
         userName: 'كابتن وصّلني',
         userPhone: '+212 6XX-XXXXXX',
@@ -33,13 +33,14 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       ),
       body: Stack(
         children: [
-          // Realistic Casablanca Demand Heatmap Canvas
+          // Realistic Casablanca Demand Heatmap Canvas in Day Mode
           const RealisticVectorMapView(
             isDriverHeatmap: true,
             centerTitle: 'الدار البيضاء • المعاريف (طلب مرتفع)',
+            isNightMode: false,
           ),
 
-          // Top Header & Free Commission Badge
+          // Top Header & Free Commission Badge (Day Mode)
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -51,7 +52,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                       _buildHeaderBtn(Icons.menu, () {
                         _scaffoldKey.currentState?.openDrawer();
                       }),
-                      // 0% Commission Badge Counter with Professional Icon
+                      // 0% Commission Badge Counter
                       InkWell(
                         onTap: () {
                           Navigator.of(context).push(
@@ -61,13 +62,14 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                           decoration: BoxDecoration(
-                            color: WasslniColors.darkSurface.withOpacity(0.92),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: WasslniColors.gold500),
+                            border: Border.all(color: WasslniColors.gold500, width: 1.5),
                             boxShadow: [
                               BoxShadow(
-                                color: WasslniColors.gold500.withOpacity(0.2),
+                                color: Colors.black.withOpacity(0.08),
                                 blurRadius: 10,
+                                offset: const Offset(0, 2),
                               ),
                             ],
                           ),
@@ -78,7 +80,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                               Text(
                                 'باقي 48 يوماً (0% عمولة)',
                                 style: TextStyle(
-                                  color: WasslniColors.gold500,
+                                  color: WasslniColors.lightTextPrimary,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w800,
                                 ),
@@ -97,21 +99,21 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             ),
           ),
 
-          // Bottom Cockpit Panel
+          // Bottom Cockpit Panel (Day Mode)
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: WasslniColors.darkSurface.withOpacity(0.95),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: WasslniColors.gold500.withOpacity(0.3)),
+                border: Border.all(color: WasslniColors.lightBorder),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.6),
+                    color: Colors.black.withOpacity(0.12),
                     blurRadius: 25,
-                    offset: const Offset(0, 10),
+                    offset: const Offset(0, 8),
                   ),
                 ],
               ),
@@ -122,8 +124,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildStatItem('أرباح اليوم', '0.00 MAD', WasslniColors.gold500, Icons.monetization_on_outlined),
-                      _buildStatItem('الرحلات', '0', WasslniColors.textPrimary, Icons.directions_car_outlined),
+                      _buildStatItem('أرباح اليوم', '0.00 MAD', WasslniColors.emerald800, Icons.monetization_on_outlined),
+                      _buildStatItem('الرحلات', '0', WasslniColors.lightTextPrimary, Icons.directions_car_outlined),
                       _buildStatItem('التقييم', 'جديد 5.0', WasslniColors.success, Icons.star_rate_rounded),
                     ],
                   ),
@@ -132,8 +134,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   // Simulated Incoming Request Test Button
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: WasslniColors.gold500,
-                      side: const BorderSide(color: WasslniColors.gold500),
+                      foregroundColor: WasslniColors.emerald800,
+                      side: const BorderSide(color: WasslniColors.emerald800),
                       minimumSize: const Size(double.infinity, 44),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -159,10 +161,10 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     child: Container(
                       height: 52,
                       decoration: BoxDecoration(
-                        color: _isOnline ? WasslniColors.emerald800 : WasslniColors.darkSurfaceRaised,
+                        color: _isOnline ? WasslniColors.emerald800 : WasslniColors.lightSurfaceRaised,
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: _isOnline ? WasslniColors.emerald500 : WasslniColors.darkBorder,
+                          color: _isOnline ? WasslniColors.emerald700 : WasslniColors.lightBorder,
                         ),
                       ),
                       child: Row(
@@ -170,14 +172,14 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         children: [
                           Icon(
                             _isOnline ? Icons.power_settings_new : Icons.circle_outlined,
-                            color: _isOnline ? Colors.white : WasslniColors.textTertiary,
+                            color: _isOnline ? Colors.white : WasslniColors.lightTextTertiary,
                             size: 22,
                           ),
                           const SizedBox(width: 10),
                           Text(
                             _isOnline ? 'أنت متصل الآن (جاهز لتلقي الطلبات)' : 'أنت غير متصل (انقر للبدء)',
                             style: TextStyle(
-                              color: _isOnline ? Colors.white : WasslniColors.textSecondary,
+                              color: _isOnline ? Colors.white : WasslniColors.lightTextSecondary,
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                             ),
@@ -203,18 +205,18 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         width: 44,
         height: 44,
         decoration: BoxDecoration(
-          color: WasslniColors.darkSurface.withOpacity(0.9),
+          color: Colors.white,
           shape: BoxShape.circle,
-          border: Border.all(color: WasslniColors.darkBorder),
+          border: Border.all(color: WasslniColors.lightBorder),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 6,
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 8,
               offset: const Offset(0, 2),
             ),
           ],
         ),
-        child: Icon(icon, color: WasslniColors.textPrimary, size: 20),
+        child: Icon(icon, color: WasslniColors.lightTextPrimary, size: 20),
       ),
     );
   }
@@ -225,11 +227,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: WasslniColors.textSecondary, size: 14),
+            Icon(icon, color: WasslniColors.lightTextSecondary, size: 14),
             const SizedBox(width: 4),
             Text(
               label,
-              style: const TextStyle(color: WasslniColors.textSecondary, fontSize: 12),
+              style: const TextStyle(color: WasslniColors.lightTextSecondary, fontSize: 12),
             ),
           ],
         ),

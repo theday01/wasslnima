@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../wasslni_theme.dart';
 
-/// Interactive modal sheet displaying in-app notifications
+/// Interactive modal sheet displaying in-app notifications in Day Mode
 class WasslniNotificationsSheet extends StatelessWidget {
   final bool isDriver;
 
@@ -28,7 +28,7 @@ class WasslniNotificationsSheet extends StatelessWidget {
               'body': 'أنت الآن تستفيد من 60 يوماً بدون أي اقتطاعات عمولة في جميع رحلاتك.',
               'time': 'منذ 5 دقائق',
               'icon': Icons.local_offer,
-              'color': WasslniColors.gold500,
+              'color': WasslniColors.emerald800,
             },
             {
               'title': 'طلب مرتفع في المعاريف وسيدي معروف',
@@ -42,7 +42,7 @@ class WasslniNotificationsSheet extends StatelessWidget {
               'body': 'تأكد دائماً من مطابقة اسم الراكب ورقم الرحلة قبل بدء الانطلاق.',
               'time': 'منذ ساعتين',
               'icon': Icons.security,
-              'color': WasslniColors.emerald400,
+              'color': WasslniColors.emerald500,
             },
           ]
         : [
@@ -51,14 +51,14 @@ class WasslniNotificationsSheet extends StatelessWidget {
               'body': 'يمكنك الآن اقتراح سعرك الخاص بكل حرية والتفاوض مباشرة مع السائقين القريبين.',
               'time': 'منذ 10 دقائق',
               'icon': Icons.celebration,
-              'color': WasslniColors.gold500,
+              'color': WasslniColors.emerald800,
             },
             {
               'title': 'سائقون متوفرون حولك',
               'body': 'يوجد أكثر من 15 كابتن نشط في منطقتك بالدار البيضاء حالياً.',
               'time': 'منذ 35 دقيقة',
               'icon': Icons.directions_car,
-              'color': WasslniColors.emerald400,
+              'color': WasslniColors.emerald500,
             },
             {
               'title': 'نصيحة أمان',
@@ -72,10 +72,9 @@ class WasslniNotificationsSheet extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * 0.65,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: WasslniColors.darkSurface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(26)),
-        border: Border.all(color: WasslniColors.gold500.withOpacity(0.4)),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,16 +89,16 @@ class WasslniNotificationsSheet extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: WasslniColors.gold500.withOpacity(0.15),
+                      color: WasslniColors.emerald800.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.notifications_active, color: WasslniColors.gold500, size: 20),
+                    child: const Icon(Icons.notifications_active, color: WasslniColors.emerald800, size: 20),
                   ),
                   const SizedBox(width: 10),
                   const Text(
                     'مركز الإشعارات والتنبيهات',
                     style: TextStyle(
-                      color: WasslniColors.textPrimary,
+                      color: WasslniColors.lightTextPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
@@ -107,14 +106,14 @@ class WasslniNotificationsSheet extends StatelessWidget {
                 ],
               ),
               IconButton(
-                icon: const Icon(Icons.close, color: WasslniColors.textSecondary),
+                icon: const Icon(Icons.close, color: WasslniColors.lightTextSecondary),
                 onPressed: () => Navigator.pop(context),
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          const Divider(color: WasslniColors.darkBorder),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
+          const Divider(color: WasslniColors.lightBorder),
+          const SizedBox(height: 8),
 
           // Notifications List
           Expanded(
@@ -126,9 +125,9 @@ class WasslniNotificationsSheet extends StatelessWidget {
                 return Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: WasslniColors.darkSurfaceRaised,
+                    color: WasslniColors.lightSurfaceRaised,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: WasslniColors.darkBorderSubtle),
+                    border: Border.all(color: WasslniColors.lightBorderSubtle),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +135,7 @@ class WasslniNotificationsSheet extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: (item['color'] as Color).withOpacity(0.15),
+                          color: (item['color'] as Color).withOpacity(0.12),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -157,7 +156,7 @@ class WasslniNotificationsSheet extends StatelessWidget {
                                   child: Text(
                                     item['title'] as String,
                                     style: const TextStyle(
-                                      color: WasslniColors.textPrimary,
+                                      color: WasslniColors.lightTextPrimary,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -166,17 +165,17 @@ class WasslniNotificationsSheet extends StatelessWidget {
                                 Text(
                                   item['time'] as String,
                                   style: const TextStyle(
-                                    color: WasslniColors.textTertiary,
+                                    color: WasslniColors.lightTextTertiary,
                                     fontSize: 10,
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 5),
                             Text(
                               item['body'] as String,
                               style: const TextStyle(
-                                color: WasslniColors.textSecondary,
+                                color: WasslniColors.lightTextSecondary,
                                 fontSize: 12,
                                 height: 1.4,
                               ),

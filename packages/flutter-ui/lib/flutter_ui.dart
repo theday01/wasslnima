@@ -9,3 +9,10 @@ export 'components/sos_button.dart';
 export 'components/realistic_vector_map.dart';
 export 'components/wasslni_side_drawer.dart';
 export 'components/wasslni_notifications_sheet.dart';
+
+// Screens
+export 'screens/trip_history_screen.dart';
+export 'screens/payment_methods_screen.dart';
+export 'screens/support_center_screen.dart';
+export 'screens/safety_center_screen.dart';
+export 'screens/settings_screen.dart';

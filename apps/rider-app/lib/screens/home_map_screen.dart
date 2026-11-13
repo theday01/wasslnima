@@ -16,7 +16,7 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: WasslniColors.darkCanvas,
+      backgroundColor: WasslniColors.lightCanvas,
       drawer: const WasslniSideDrawer(
         userName: 'الراكب الكريم',
         userPhone: '+212 6XX-XXXXXX',
@@ -24,13 +24,14 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
       ),
       body: Stack(
         children: [
-          // Authentic Realistic Vector Map (Casablanca Grid & Streets)
+          // Authentic OpenStreetMap Real Tile Map with Casablanca Layout in Day Mode
           const RealisticVectorMapView(
             isDriverHeatmap: false,
             centerTitle: 'الدار البيضاء • أنفا',
+            isNightMode: false,
           ),
 
-          // Floating Top App Bar
+          // Floating Top App Bar (Day Mode)
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -43,25 +44,25 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     decoration: BoxDecoration(
-                      color: WasslniColors.darkSurface.withOpacity(0.88),
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: WasslniColors.gold500.withOpacity(0.4)),
+                      border: Border.all(color: WasslniColors.lightBorder),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.4),
-                          blurRadius: 8,
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 10,
                           offset: const Offset(0, 2),
                         ),
                       ],
                     ),
                     child: const Row(
                       children: [
-                        Icon(Icons.location_on, color: WasslniColors.gold500, size: 16),
+                        Icon(Icons.location_on, color: WasslniColors.emerald800, size: 16),
                         SizedBox(width: 6),
                         Text(
                           'وصّلني كازابلانكا',
                           style: TextStyle(
-                            color: WasslniColors.gold500,
+                            color: WasslniColors.lightTextPrimary,
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
                           ),
@@ -77,21 +78,21 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
             ),
           ),
 
-          // Floating Bottom Booking Sheet
+          // Floating Bottom Booking Sheet (Day Mode)
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: WasslniColors.darkSurface.withOpacity(0.95),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: WasslniColors.gold500.withOpacity(0.3)),
+                border: Border.all(color: WasslniColors.lightBorder),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.6),
-                    blurRadius: 25,
-                    offset: const Offset(0, 10),
+                    color: Colors.black.withOpacity(0.12),
+                    blurRadius: 20,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
@@ -102,9 +103,9 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
                   const Text(
                     'مرحباً بك، فين غادي اليوم؟',
                     style: TextStyle(
-                      color: WasslniColors.textSecondary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                      color: WasslniColors.lightTextPrimary,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -120,31 +121,31 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: WasslniColors.darkSurfaceRaised,
+                        color: WasslniColors.lightSurfaceRaised,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: WasslniColors.darkBorder),
+                        border: Border.all(color: WasslniColors.lightBorder),
                       ),
                       child: const Row(
                         children: [
-                          Icon(Icons.search, color: WasslniColors.gold500),
+                          Icon(Icons.search, color: WasslniColors.emerald800),
                           SizedBox(width: 12),
                           Expanded(
                             child: Text(
                               'إلى أين وجهتك؟ (حدد أو اكتب)',
                               style: TextStyle(
-                                color: WasslniColors.textSecondary,
+                                color: WasslniColors.lightTextSecondary,
                                 fontSize: 14,
                               ),
                             ),
                           ),
-                          Icon(Icons.mic_none, color: WasslniColors.emerald400),
+                          Icon(Icons.mic_none, color: WasslniColors.emerald800),
                         ],
                       ),
                     ),
                   ),
 
                   const SizedBox(height: 14),
-                  // Saved places chips with proper Material Icons
+                  // Saved places chips in Day Mode
                   Row(
                     children: [
                       _buildPlaceChip(Icons.home, 'الدار (المعاريف)', () {
@@ -177,18 +178,18 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
         width: 44,
         height: 44,
         decoration: BoxDecoration(
-          color: WasslniColors.darkSurface.withOpacity(0.88),
+          color: Colors.white,
           shape: BoxShape.circle,
-          border: Border.all(color: WasslniColors.darkBorder),
+          border: Border.all(color: WasslniColors.lightBorder),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 6,
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 8,
               offset: const Offset(0, 2),
             ),
           ],
         ),
-        child: Icon(icon, color: WasslniColors.textPrimary, size: 20),
+        child: Icon(icon, color: WasslniColors.lightTextPrimary, size: 20),
       ),
     );
   }
@@ -201,14 +202,14 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           decoration: BoxDecoration(
-            color: WasslniColors.darkSurfaceRaised,
+            color: WasslniColors.lightSurfaceRaised,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: WasslniColors.darkBorderSubtle),
+            border: Border.all(color: WasslniColors.lightBorderSubtle),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: WasslniColors.gold500, size: 14),
+              Icon(icon, color: WasslniColors.emerald800, size: 14),
               const SizedBox(width: 6),
               Flexible(
                 child: Text(
@@ -217,7 +218,7 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    color: WasslniColors.textPrimary,
+                    color: WasslniColors.lightTextPrimary,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),

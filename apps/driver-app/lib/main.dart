@@ -15,7 +15,9 @@ class WasslniDriverApp extends StatelessWidget {
     return MaterialApp(
       title: 'وصّلني كابتن | Wasslni Captain',
       debugShowCheckedModeBanner: false,
-      theme: WasslniThemeData.darkTheme,
+      theme: WasslniThemeData.lightTheme, // Day Mode by Default
+      darkTheme: WasslniThemeData.darkTheme,
+      themeMode: ThemeMode.light, // Default Day Mode
       locale: const Locale('ar', 'MA'), // Moroccan Arabic RTL default
       supportedLocales: const [
         Locale('ar', 'MA'), // Moroccan Darija
@@ -32,4 +34,3 @@ class WasslniDriverApp extends StatelessWidget {
     );
   }
 }
-

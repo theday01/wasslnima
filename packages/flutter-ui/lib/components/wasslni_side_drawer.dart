@@ -11,6 +11,7 @@ class WasslniSideDrawer extends StatelessWidget {
   final String userName;
   final String userPhone;
   final String userRole; // 'rider' or 'driver'
+  final VoidCallback? onSwitchRole;
   final VoidCallback? onProfileTap;
   final VoidCallback? onHistoryTap;
   final VoidCallback? onWalletTap;
@@ -23,6 +24,7 @@ class WasslniSideDrawer extends StatelessWidget {
     this.userName = 'المستخدم الكريم',
     this.userPhone = '+212 6XX-XXXXXX',
     this.userRole = 'rider',
+    this.onSwitchRole,
     this.onProfileTap,
     this.onHistoryTap,
     this.onWalletTap,
@@ -120,6 +122,58 @@ class WasslniSideDrawer extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                 children: [
+                  // Switch Role Option
+                  if (onSwitchRole != null)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: isDriver
+                              ? [WasslniColors.gold500.withOpacity(0.18), WasslniColors.emerald800.withOpacity(0.08)]
+                              : [WasslniColors.emerald800.withOpacity(0.12), WasslniColors.gold500.withOpacity(0.12)],
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: isDriver ? WasslniColors.gold500 : WasslniColors.emerald800,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: ListTile(
+                        leading: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: isDriver ? WasslniColors.emerald800 : WasslniColors.gold500,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            isDriver ? Icons.person_pin_circle_rounded : Icons.local_taxi_rounded,
+                            color: Colors.white,
+                            size: 22,
+                          ),
+                        ),
+                        title: Text(
+                          isDriver ? 'التبديل إلى وضع الراكب' : 'التبديل إلى وضع السائق (الكابتن)',
+                          style: TextStyle(
+                            color: WasslniColors.emerald800,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 14,
+                          ),
+                        ),
+                        subtitle: Text(
+                          isDriver ? 'طلب توصيلة واقتراح الأسعار' : 'استقبال الطلبات وبدء العمل',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: WasslniColors.textSecondary,
+                          ),
+                        ),
+                        trailing: const Icon(Icons.swap_horiz_rounded, color: WasslniColors.emerald800),
+                        onTap: () {
+                          Navigator.pop(context);
+                          onSwitchRole!();
+                        },
+                      ),
+                    ),
                   _buildDrawerTile(
                     icon: Icons.history,
                     title: 'سجل الرحلات',

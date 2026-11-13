@@ -107,12 +107,13 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
             },
           ),
           children: [
-            // A. High-Resolution World Street Map (Arabic street names, zero watermark)
+            // A. High-Resolution World Street Map (Arabic street names, zero watermark, auto-fallback)
             TileLayer(
               urlTemplate: tileUrl,
+              fallbackUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               userAgentPackageName: 'ma.wasslni.app',
               maxZoom: 19,
-              retinaMode: RetinaMode.isHighDensity(context),
+              retinaMode: false,
             ),
 
             // B. Demand Heatmap Circles (Driver Cockpit Mode)

@@ -35,7 +35,11 @@ jobs:
       - name: Scaffolding & Build Unified Wasslni App APK
         working-directory: apps/wasslni-app
         run: |
+          # Back up custom AndroidManifest before scaffolding
+          cp android/app/src/main/AndroidManifest.xml /tmp/AndroidManifest.xml
           flutter create . --platforms=android --org=ma.wasslni --project-name=wasslni_app
+          # Restore full production AndroidManifest with INTERNET and network permissions
+          cp /tmp/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
           # Restore custom high-res branded launcher icons
           cp -r ../../assets/icons/app/* android/app/src/main/res/
           flutter pub get

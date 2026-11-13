@@ -308,20 +308,26 @@
     }
 
     /* Real Leaflet Map Container */
-    #real-map {
+    #real-map, #real-map-trip {
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
       z-index: 1;
-      background: #0c120f;
+      background: #e5e8e6;
     }
 
-    /* Custom Dark Leaflet Tiles Inversion filter */
+    /* Crystal Clear Map Tiles - High Resolution & Vivid Contrast */
     .leaflet-tile {
-      filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+      filter: saturate(1.1) contrast(1.04);
     }
 
-    .leaflet-control-attribution { display: none !important; }
+    .leaflet-control-attribution { 
+      background: rgba(255, 255, 255, 0.85) !important;
+      color: #333 !important;
+      font-size: 10px !important;
+      padding: 2px 6px !important;
+      border-radius: 4px !important;
+    }
 
     /* Map Overlays & Floating Top Bar */
     .top-floating-bar {
@@ -1159,32 +1165,91 @@
       }
     }
 
-    // Initialize Real Leaflet Map of Casablanca with Moroccan Luxury Dark Tile Layer
-    let map;
+    // Initialize Real High-Resolution Interactive Maps of Casablanca (Day Mode)
+    let map, mapTrip;
     function initMap() {
-      const casaLat = 33.5898;
-      const casaLng = -7.6038;
+      // Center on Casablanca (Maârif / Bd Zerktouni / Bd d'Anfa)
+      const casaLat = 33.5885;
+      const casaLng = -7.6320;
 
+      // 1. Home Rider Map
       map = L.map('real-map', {
-        zoomControl: false,
-        attributionControl: false
+        zoomControl: true,
+        attributionControl: true
       }).setView([casaLat, casaLng], 14);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19
+      // OpenStreetMap & CartoDB high-resolution tiles
+      L.tileLayer('https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
       }).addTo(map);
 
-      const carIcon = L.divIcon({
+      // High-End Vector Car Marker (No Emojis)
+      const createCarIcon = (label, eta) => L.divIcon({
         className: 'custom-car-pin-container',
-        html: '<div class="custom-car-pin">🚕</div>',
-        iconSize: [42, 42],
-        iconAnchor: [21, 21]
+        html: `
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <div style="background:#FFFFFF; color:#0B3D2E; font-size:10px; font-weight:800; padding:2px 7px; border-radius:8px; border:1px solid #0B3D2E; box-shadow:0 3px 8px rgba(0,0,0,0.18); white-space:nowrap; margin-bottom:2px;">
+              ${eta}
+            </div>
+            <div style="width:38px; height:38px; background:#FFFFFF; border-radius:50%; border:2.5px solid #C9A24B; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#0B3D2E">
+                <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/>
+                <circle cx="7.5" cy="14.5" r="1.5"/>
+                <circle cx="16.5" cy="14.5" r="1.5"/>
+              </svg>
+            </div>
+          </div>`,
+        iconSize: [44, 52],
+        iconAnchor: [22, 50]
       });
 
-      L.marker([33.5880, -7.6010], { icon: carIcon }).addTo(map).bindPopup("كابتن كريم (داسيا لوغان) - 3 دقائق");
-      L.marker([33.5930, -7.6080], { icon: carIcon }).addTo(map).bindPopup("كابتن ياسين (رونو كليو) - 5 دقائق");
-      L.marker([33.5840, -7.6120], { icon: carIcon }).addTo(map).bindPopup("كابتن عادل (فيات تيبو) - 4 دقائق");
-      L.marker([33.5790, -7.5950], { icon: carIcon }).addTo(map);
+      // User Pickup Location Pin
+      const userPinIcon = L.divIcon({
+        className: 'user-pickup-pin',
+        html: `
+          <div style="position:relative; display:flex; flex-direction:column; align-items:center;">
+            <div style="background:#0B3D2E; color:#FFFFFF; font-size:11px; font-weight:800; padding:3px 8px; border-radius:10px; border:1.5px solid #C9A24B; box-shadow:0 3px 8px rgba(0,0,0,0.25); white-space:nowrap;">
+              موقعك الحالي
+            </div>
+            <svg width="34" height="42" viewBox="0 0 24 24" fill="#0B3D2E" style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+          </div>`,
+        iconSize: [80, 56],
+        iconAnchor: [40, 54]
+      });
+
+      L.marker([casaLat, casaLng], { icon: userPinIcon }).addTo(map).bindPopup("<b>موقعك الحالي</b><br>المعاريف • شارع المسيرة");
+
+      // Nearby Captains
+      L.marker([33.5895, -7.6300], { icon: createCarIcon('كريم', '2 دقيقة') }).addTo(map).bindPopup("كابتن كريم (داسيا لوغان) - تقييم 4.95 ⭐");
+      L.marker([33.5840, -7.6360], { icon: createCarIcon('ياسين', '4 دقائق') }).addTo(map).bindPopup("كابتن ياسين (رونو كليو 5) - تقييم 4.90 ⭐");
+      L.marker([33.5930, -7.6380], { icon: createCarIcon('حمزة', '6 دقائق') }).addTo(map).bindPopup("كابتن حمزة (فيات تيبو) - تقييم 4.88 ⭐");
+      L.marker([33.5820, -7.6250], { icon: createCarIcon('عمر', '5 دقائق') }).addTo(map).bindPopup("كابتن عمر (بيجو 208) - تقييم 4.92 ⭐");
+
+      // 2. Active Trip Map
+      const tripMapEl = document.getElementById('real-map-trip');
+      if (tripMapEl) {
+        mapTrip = L.map('real-map-trip', {
+          zoomControl: false,
+          attributionControl: false
+        }).setView([33.5860, -7.6340], 14);
+
+        L.tileLayer('https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+          maxZoom: 19
+        }).addTo(mapTrip);
+
+        // Driver approaching route line (Emerald Route Polyline)
+        const latlngs = [
+          [33.5895, -7.6300],
+          [33.5888, -7.6310],
+          [33.5885, -7.6320]
+        ];
+        L.polyline(latlngs, { color: '#0B3D2E', weight: 5, opacity: 0.85, dashArray: '6, 8' }).addTo(mapTrip);
+        L.marker([33.5885, -7.6320], { icon: userPinIcon }).addTo(mapTrip);
+        L.marker([33.5895, -7.6300], { icon: createCarIcon('كريم', '2 دقيقة') }).addTo(mapTrip);
+      }
     }
 
     window.addEventListener('DOMContentLoaded', initMap);
@@ -1196,11 +1261,14 @@
       const targetScreen = document.getElementById(screenId);
       if (targetScreen) targetScreen.classList.add('active');
 
-      const activeBtn = Array.from(document.querySelectorAll('.pill-btn')).find(b => b.getAttribute('onclick').includes(screenId));
+      const activeBtn = Array.from(document.querySelectorAll('.pill-btn')).find(b => (b.getAttribute('onclick') || '').includes(screenId));
       if (activeBtn) activeBtn.classList.add('active');
 
       if (screenId === 'screen-rider-home' && map) {
         setTimeout(() => map.invalidateSize(), 200);
+      }
+      if (screenId === 'screen-trip' && mapTrip) {
+        setTimeout(() => mapTrip.invalidateSize(), 200);
       }
     }
 

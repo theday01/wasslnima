@@ -20,6 +20,8 @@ class RealisticVectorMapView extends StatefulWidget {
   final String centerTitle;
   final bool isNightMode;
   final VoidCallback? onCenterTap;
+  final List<LatLng>? routePoints;
+  final List<Map<String, dynamic>>? liveDrivers;
 
   const RealisticVectorMapView({
     Key? key,
@@ -27,6 +29,8 @@ class RealisticVectorMapView extends StatefulWidget {
     this.centerTitle = 'الدار البيضاء • أنفا',
     this.isNightMode = false,
     this.onCenterTap,
+    this.routePoints,
+    this.liveDrivers,
   }) : super(key: key);
 
   @override
@@ -41,53 +45,6 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
   // Default Casablanca Center (Maârif / Bd Zerktouni)
   static final LatLng _defaultCenter = LatLng(33.5885, -7.6320);
   double _currentZoom = 14.5;
-
-  // Active Casablanca Captains
-  final List<Map<String, dynamic>> _drivers = [
-    {
-      'name': 'كريم (لوغان)',
-      'car': 'داسيا لوغان • رمادي',
-      'point': LatLng(33.5895, -7.6300),
-      'eta': '2 دقيقة',
-      'angle': 45.0,
-      'rating': '4.95 ⭐',
-    },
-    {
-      'name': 'ياسين (كليو 5)',
-      'car': 'رونو كليو 5 • أسود',
-      'point': LatLng(33.5840, -7.6360),
-      'eta': '4 دقائق',
-      'angle': 120.0,
-      'rating': '4.90 ⭐',
-    },
-    {
-      'name': 'حمزة (تيبو)',
-      'car': 'فيات تيبو • أبيض',
-      'point': LatLng(33.5930, -7.6380),
-      'eta': '6 دقائق',
-      'angle': 210.0,
-      'rating': '4.88 ⭐',
-    },
-    {
-      'name': 'عمر (بيجو 208)',
-      'car': 'بيجو 208 • أزرق',
-      'point': LatLng(33.5820, -7.6250),
-      'eta': '5 دقائق',
-      'angle': 315.0,
-      'rating': '4.92 ⭐',
-    },
-  ];
-
-  // Realistic Casablanca Road Route (Maarif to Hassan II Mosque / Port)
-  final List<LatLng> _sampleRoute = [
-    LatLng(33.5885, -7.6320), // Maarif
-    LatLng(33.5895, -7.6300),
-    LatLng(33.5912, -7.6275),
-    LatLng(33.5935, -7.6240),
-    LatLng(33.5960, -7.6190),
-    LatLng(33.5985, -7.6140),
-    LatLng(33.5992, -7.6114), // Casa-Port
-  ];
 
   @override
   void initState() {
@@ -189,25 +146,26 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
                 ],
               ),
 
-            // C. Route Path (Emerald with Gold Outline)
-            PolylineLayer(
-              polylines: [
-                // Outer Glow / Border
-                Polyline(
-                  points: _sampleRoute,
-                  color: WasslniColors.gold500.withOpacity(0.85),
-                  strokeWidth: 7.0,
-                ),
-                // Inner Emerald Core
-                Polyline(
-                  points: _sampleRoute,
-                  color: WasslniColors.emerald800,
-                  strokeWidth: 4.5,
-                ),
-              ],
-            ),
+            // C. Route Path (Emerald with Gold Outline) - Only rendered when genuine route points are provided
+            if (widget.routePoints != null && widget.routePoints!.isNotEmpty)
+              PolylineLayer(
+                polylines: [
+                  // Outer Glow / Border
+                  Polyline(
+                    points: widget.routePoints!,
+                    color: WasslniColors.gold500.withOpacity(0.85),
+                    strokeWidth: 7.0,
+                  ),
+                  // Inner Emerald Core
+                  Polyline(
+                    points: widget.routePoints!,
+                    color: WasslniColors.emerald800,
+                    strokeWidth: 4.5,
+                  ),
+                ],
+              ),
 
-            // D. Interactive Map Markers (User Pin + Driver Captains)
+            // D. Interactive Map Markers (User Pin + Optional Real Driver Markers)
             MarkerLayer(
               markers: [
                 // 1. User Pickup Location Marker with Radar Animation
@@ -219,16 +177,17 @@ class _RealisticVectorMapViewState extends State<RealisticVectorMapView>
                   child: _buildPickupMarker(),
                 ),
 
-                // 2. Active Driver Captains
-                ..._drivers.map((d) {
-                  return Marker(
-                    point: d['point'] as LatLng,
-                    width: 100,
-                    height: 80,
-                    alignment: Alignment.center,
-                    child: _buildDriverMarker(d),
-                  );
-                }).toList(),
+                // 2. Real Driver Markers (Only if provided dynamically from live WebSocket/API)
+                if (widget.liveDrivers != null)
+                  ...widget.liveDrivers!.map((d) {
+                    return Marker(
+                      point: d['point'] as LatLng,
+                      width: 100,
+                      height: 80,
+                      alignment: Alignment.center,
+                      child: _buildDriverMarker(d),
+                    );
+                  }).toList(),
               ],
             ),
           ],

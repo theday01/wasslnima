@@ -1222,12 +1222,6 @@
 
       L.marker([casaLat, casaLng], { icon: userPinIcon }).addTo(map).bindPopup("<b>موقعك الحالي</b><br>المعاريف • شارع المسيرة");
 
-      // Nearby Captains
-      L.marker([33.5895, -7.6300], { icon: createCarIcon('كريم', '2 دقيقة') }).addTo(map).bindPopup("كابتن كريم (داسيا لوغان) - تقييم 4.95 ⭐");
-      L.marker([33.5840, -7.6360], { icon: createCarIcon('ياسين', '4 دقائق') }).addTo(map).bindPopup("كابتن ياسين (رونو كليو 5) - تقييم 4.90 ⭐");
-      L.marker([33.5930, -7.6380], { icon: createCarIcon('حمزة', '6 دقائق') }).addTo(map).bindPopup("كابتن حمزة (فيات تيبو) - تقييم 4.88 ⭐");
-      L.marker([33.5820, -7.6250], { icon: createCarIcon('عمر', '5 دقائق') }).addTo(map).bindPopup("كابتن عمر (بيجو 208) - تقييم 4.92 ⭐");
-
       // 2. Active Trip Map Setup Helper
       window.initTripMap = function() {
         const tripMapEl = document.getElementById('real-map-trip');
